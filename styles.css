@@ -1,0 +1,717 @@
+body {
+    font-family: "Poppins";
+    margin: 0;
+}
+
+::selection {
+    background-color: #5d8b9e;
+    color: white;
+}
+
+@font-face {
+    font-family: "Church";
+    src: url("./assets/fonts/rotis-semi-serif-std-65-bold.otf");
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("./assets/fonts/Poppins-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Papyrus";
+    src: url("./assets/fonts/papyrus.ttf");
+}
+
+.video {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    display: grid;
+    grid-template-columns: 660px auto;
+    position: relative;
+}
+
+.snippet {
+    background-color: rgba(217, 217, 217, 0.50);
+    margin: 5px 0;
+    width: 655px;
+    min-height: 80px;
+    position: relative;
+}
+
+.snippet:first-child {
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.snippet:last-child {
+    margin: 0;
+    margin-top: 5px;
+}
+
+.snippet:only-child {
+    margin: 0;
+}
+
+.time {
+    background-color: white;
+    border-radius: 8px;
+    display: inline-block;
+    width: 52px;
+    height: 32px;
+    padding: 5px;
+    margin: 20px;
+    line-height: 32px;
+    text-align: center;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+    transition: all 400ms ease;
+    user-select: none;
+    position: absolute;
+}
+
+.time:hover {
+    background-color: #5D8B9E;
+    color: white;
+}
+
+.line {
+    display: inline-block;
+    margin-left: 6px;
+    width: 80%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.highlight {
+    color: #5D8B9E;
+}
+
+.bracket {
+    width: 3px;
+    height: 100%;
+    background-color: black;
+    position: absolute;
+    right: 0;
+}
+
+#container {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 209px 926px auto;
+    margin-top: 35px;
+}
+
+.logo {
+    width: 138px;
+    height: 138px;
+    margin-left: 38px;
+}
+
+.title {
+    font-family: "Church";
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+#upper-search {
+    height: 150px;
+}
+
+#lookup hr {
+    border: 1.4px solid black;
+    width: 926px;
+}
+
+#search-container {
+    height: 58px;
+}
+
+#search-container, #searchbar {
+    position: relative;
+    width: 655px;
+    border-radius: 28px;
+    background-color: #5D8B9E;
+    color: white;
+    font-family: "Poppins";
+    font-weight: 400;
+    font-size: 16px;
+}
+
+#searchbar {
+    width: 600px;
+    height: 56px;
+}
+
+#searchbar::selection {
+    background-color: white;
+    color: #5D8B9E;
+}
+
+#search-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 5px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 45px;
+    transition: all 100ms ease;
+    border: 1px solid transparent;
+    z-index: 20;
+}
+
+#search-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+#search-button:active {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+#searchbar {
+    border: none;
+    outline: none;
+    text-indent: 20px;
+}
+
+#searchbar::placeholder {
+    color: lightgray !important;
+}
+
+#filter-grid {
+    height: 48px;
+    width: 920px;
+    position: relative;
+    color: black;
+}
+
+#filter-grid div {
+    display: inline;
+}
+
+#dropdowns {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.dropdown {
+    position: relative;
+    z-index: 100;
+}
+
+.dropdown .cover {
+    color: gray;
+    border-radius: 8px;
+    background-color: #D9D9D9;
+    padding: 4px 30px 4px 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 3px;
+    position: relative;
+    user-select: none;
+}
+
+.dropdown .cover .value, .dropdown .cover img {
+    color: black;
+    pointer-events: none;
+}
+
+.dropdown .cover span {
+    pointer-events: none;
+}
+
+.dropdown .cover img {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+}
+
+.dropdown .content {
+    position: absolute;
+    top: 35px;
+    left: 5px;
+    background-color: #D9D9D9;
+    height: 200px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.time-container {
+    position: relative;
+    z-index: 1;
+}
+
+.dropdown hr {
+    width: 99% !important;
+    border-width: 1px !important;
+    margin-top: 30px;
+}
+
+.dropdown-grid {
+    width: 91%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: grid !important;
+    grid-template-columns: auto auto;
+}
+
+.dropdown-actions {
+    display: grid !important;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    grid-template-columns: 50% 50%;
+}
+
+.dropdown-actions div {
+    position: relative;
+}
+
+.ok-con {
+    text-align: right;
+}
+
+.cancel, .ok {
+    border-radius: 8px;
+    user-select: none;
+    transition: all 100ms ease;
+    width: 65px !important;
+    height: 25px !important;
+    display: inline-block !important;
+    text-align: center;
+    line-height: 25px;
+    margin: 8px;
+    font-size: 13px;
+}
+
+#books-content .cancel, #books-content .ok {
+    width: 55px !important;
+}
+
+.cancel:hover, .ok:hover {
+    background-color: gray;
+    color: white;
+}
+
+.cancel:active, .ok:active {
+    background-color: rgb(157, 157, 157);
+    color: black;
+}
+
+.dropdown input[type="text"], .dropdown input[type="date"] {
+    width: 92px;
+    height: 40px;
+    border-radius: 0;
+    border: 1px solid black;
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="date"]::-moz-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+#end-date, #start-date {
+    text-align: center;
+}
+
+#end-date-con {
+    text-align: right;
+}
+
+.dropdown .content .description {
+    font-size: 11px;
+    margin-left: 10px;
+    user-select: none;
+}
+
+.dropdown .options {
+    position: absolute;
+    left: 0;
+    top: 30px;
+    width: 100%;
+    text-indent: 10px;
+    user-select: none;
+}
+
+.dropdown .clickable {
+    display: block !important;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    user-select: none;
+    transition: all 100ms ease;
+}
+
+.dropdown .clickable:hover {
+    background-color: gray;
+    color: white;
+}
+
+.dropdown .clickable:active, .dropdown .item.checked {
+    background-color: rgb(183, 183, 183);
+    color: black;
+}
+
+.dropdown .checked {
+    background-color: #5D8B9E !important;
+    color: white !important;
+}
+
+.testament {
+    font-size: 13px;
+}
+
+.book {
+    width: 100%;
+    display: block !important;
+    text-indent: 10px;
+    user-select: none;
+    transition: all 100ms ease;
+}
+
+.book:hover, .testament-selection:hover {
+    background-color: gray;
+    color: white;
+}
+
+.book:active, .testament-selection:active {
+    background-color: rgb(183, 183, 183) !important;
+    color: black !important;
+}
+
+.testament hr {
+    margin: 0;
+    margin-top: 5px;
+    margin-bottom: 2px;
+}
+
+.testament hr:last-child {
+    margin-bottom: 7px;
+    margin-top: 2px;
+}
+
+.testament-selection {
+    display: block !important;
+    font-size: 15px;
+    text-indent: 5px;
+    transition: all 100ms ease;
+    user-select: none;
+}
+
+#pastors {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.pastor {
+    width: 50px;
+    border: 1px solid #5D8B9E;
+    border-radius: 8px;
+    margin: 1px;
+    padding: 5px 10px;
+    font-size: 14px;
+    user-select: none;
+    position: relative;
+    transition: all 100ms ease;
+}
+
+.pastor:hover {
+    background-color: lightgray;
+}
+
+.pastor.checked {
+    background-color: #5D8B9E;
+    color: white;
+    padding-left: 25px;
+}
+
+.pastor svg {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 5px;
+}
+
+.arrow.disabled {
+    background-color: rgba(0, 0, 0, 0.01);
+}
+
+#match-count {
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+#no-results {
+    margin-bottom: 20px;
+}
+
+a {
+    color: #5D8B9E;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
+#load-more {
+    width: 655px;
+    text-align: center;
+    border-radius: 8px;
+    border: 1px solid black;
+    line-height: 40px;
+    height: 40px;
+    transition: all 200ms ease;
+    margin-bottom: 25px;
+    user-select: none;
+}
+
+#load-more:hover {
+    background-color: #5D8B9E;
+    color: white;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid transparent;
+}
+
+
+#miniplayer {
+    position: fixed;
+    right: 2%;
+    transform: translateY(-50%);
+    top: 50%;
+    width: 625px;
+    height: 386.71875px;
+    z-index: 20000000;
+}
+
+#miniplayer-close {
+    width: 100%;
+    height: 34px;
+    text-align: right;
+}
+
+#miniplayer-close svg {
+    width: 30px;
+    height: 30px;
+    line-height: 20px;
+    border-radius: 4px 4px 0 0;
+    padding: 2px;
+}
+
+#miniplayer iframe {
+    width: 100%;
+    height: 90%;
+}
+
+#resize-handle {
+    cursor: nwse-resize;
+    text-align: right;
+    border-radius: 50%;
+    z-index: 200000000000;
+}
+
+#drag-overlay {
+    position: absolute;
+    width: 100%;
+    height: 70%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#scroll-to-top {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    border-radius: 50%;
+    background-color: #5D8B9E;
+    color: white;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 200ms ease;
+    box-shadow: 0 0 10px black;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+#scroll-to-top:hover {
+    background-color: rgba(93, 139, 158, 0.8);
+    box-shadow: 0 0 2px black;
+}
+
+.threed {
+    text-shadow: 0 1px 0 yellow, 0 2px 0 yellow,
+                0 3px 0 yellow, 0 4px 0 yellow,
+                0 5px 0 yellow, 0 6px 0 yellow,
+                0 7px 0 yellow, 0 8px 0 yellow,
+                0 9px 0 yellow, 0 10px 0 yellow,
+                0 11px 0 yellow, 0 12px 0 yellow,
+                0 20px 30px rgba(0, 0, 0, 0.5);
+}
+
+.papyrus {
+    font-family: "Papyrus" !important;
+}
+
+@media screen and (max-width: 1135px) {
+    .snippet {
+        width: 90vw;
+    }
+
+    .line {
+        height: auto;
+        width: 70%;
+    }
+
+    .logo {
+        width: 58px;
+        height: 61px;
+        transform: translateX(-50%);
+        margin: 0;
+        display: inline-block;
+        position: absolute;
+        left: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .title {
+        display: inline-block;
+        margin: 0;
+        margin-left: 75px;
+        font-size: 35px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        line-height: 61px;
+    }
+
+    #container {
+        grid-template-columns: 0 auto 0;
+    }
+
+    #lookup {
+        position: absolute;
+        left: 50%;
+        top: 90px;
+        transform: translateX(-50%);
+        width: 100vw;
+    }
+
+    #search-container {
+        width: 90vw;
+    }
+
+    #searchbar {
+        width: calc(90vw - 50px);
+    }
+
+    #search-container {
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+
+    #lookup hr {
+        width: 90vw;
+    }
+
+    #filter-grid {
+        width: 90vw;
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+
+    #contents {
+        margin-left: 20px;
+    }
+
+    .instances {
+        width: 655px;
+    }
+
+    .mobile-title {
+        position: absolute;
+        top: 20px;
+        left: 10px;
+        width: 90%;
+        margin-left: 50%;
+        transform: translateX(-50%);
+        position: relative;
+        height: 58px;
+    }
+
+    #upper-search {
+        height: 100px;
+    }
+
+    #load-more {
+        margin-bottom: 70px;
+        width: 100%;
+    }
+
+    .dropdown .cover {
+        color: black;
+        width: auto;
+        display: inline-block !important;
+    }
+
+    #upload-full, #sort-full, #books-full, #pastors-full {
+        font-size: 11px;
+    }
+    
+    #upload-img, #sort-img, #books-img, #pastors-img {
+        width: 12px;
+        height: 12px;
+    }
+
+    #pastors-content .options .clickable {
+        position: relative;
+    }
+
+    #pastors-content .options .clickable svg {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 5px;
+    }
+
+    #pastors-content .cancel {
+        width: 55px !important;
+    }
+
+    #pastors-content .ok {
+        width: 25px !important;
+    }
+
+    #miniplayer {
+        width: 90%;
+        height: 37%;
+        top: 63%;
+        left: 50%;
+        transform: translate(-50%, -0%);
+        z-index: 200000;
+    }
+
+    @supports (-webkit-appearance: none) {
+        .time {
+            top: calc(50% + 20px) !important;
+            transform: translateY(-50%) !important;
+        }
+    }
+}
