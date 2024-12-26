@@ -74,29 +74,9 @@ for (let x = 0; x < 10; x++) {
 
     async function getCaptions(videoId) {
         const url = `https://www.youtube.com/watch?v=${videoId}`;
-        const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', `--disable-setuid-sandbox`], userDataDir: './user_data' });
+        const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', `--disable-setuid-sandbox`] });
         const page = await browser.newPage();
         page.on('console', msg => console.log('PAGE LOG:', msg.text()));
-
-        await page.goto('https://accounts.google.com/ServiceLogin?service=youtube', { waitUntil: 'networkidle2' });
-
-        // Wait for the email input and type the email
-        await page.waitForSelector('input[type="email"]');
-        await page.type('input[type="email"]', process.env.EMAIL, { delay: 100 }); // Type with a delay
-    
-        // Click the "Next" button
-        await page.click('#identifierNext');
-        await page.waitForTimeout(2000); // Wait for the next page to load
-    
-        // Wait for the password input and type the password
-        await page.waitForSelector('input[type="password"]');
-        await page.type('input[type="password"]', procces.env.PASSWORD, { delay: 100 }); // Type with a delay
-    
-        // Click the "Next" button
-        await page.click('#passwordNext');
-        
-        // Wait for navigation to complete
-        await page.waitForNavigation({ waitUntil: 'networkidle0' });
 
         await page.goto(url, { waitUntil: 'networkidle2' });
 
