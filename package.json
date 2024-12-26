@@ -7,6 +7,7 @@
     "puppeteer": "^23.10.4",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
-    "xml2js": "^0.6.2"
+    "xml2js": "^0.6.2",
+    "youtube-transcript": "^1.2.1"
   }
 }
