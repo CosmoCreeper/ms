@@ -78,9 +78,8 @@ for (let x = 0; x < 10; x++) {
 
         await page.goto(url, { waitUntil: 'networkidle2' });
 
-        console.log(`Page: ${JSON.stringify(page)}`);
-
         const captionsUrl = await page.evaluate(() => {
+            console.log(global.ytplayer);
             if (window.ytplayer && window.ytplayer.config && window.ytplayer.config.args) {
                 const rawPlayerResponse = window.ytplayer.config.args.raw_player_response;
                 if (rawPlayerResponse && rawPlayerResponse.captions) {
