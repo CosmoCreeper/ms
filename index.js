@@ -125,7 +125,7 @@ for (let x = 0; x < 10; x++) {
         return plain;
     }
 
-    (async () => {
+    await (async () => {
         const rawVideoDetails = await getVideoDetails(PLAYLIST_ID);
         const videoDetails = await rawVideoDetails.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
         console.log(`Retrieved video IDs of playlist ${IDs[x]}.`);
