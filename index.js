@@ -15,7 +15,7 @@ const CNs = ["1samuel", "other", "jeremiah", "revelation", "hebrews", "specials"
 for (let x = 0; x < 10; x++) {
     console.clear();
 
-    const API_KEY = ${{ secrets.GOOGLE_API_KEY }};
+    const API_KEY = process.env.API_KEY;
     let PLAYLIST_ID = IDs[x];
     if (PLAYLIST_ID === "") PLAYLIST_ID = "PLDgRNhRk716aAzsef8-FSiybk9_BSz02C";
 
