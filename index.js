@@ -17,7 +17,7 @@ for (let x = 0; x < 10; x++) {
 
     const API_KEY = process.env.API_KEY;
     for (let i = 0; i < API_KEY.length; i++) {
-        console.log(str.charAt(i));
+        console.log(API_KEY.charAt(i));
     }
     let PLAYLIST_ID = IDs[x];
     if (PLAYLIST_ID === "") PLAYLIST_ID = "PLDgRNhRk716aAzsef8-FSiybk9_BSz02C";
