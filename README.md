@@ -1,2 +1,2 @@
 # The FBC Sermon Search
-Data files not in the ./data/ directory should be deleted soon.
+Data files have been moved to the ./data/ directory.
