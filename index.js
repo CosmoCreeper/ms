@@ -12,7 +12,9 @@ const IDs = [
 ];
 const CNs = ["1samuel", "jeremiah", "revelation", "hebrews", "specials", "2thessalonians", "luke", "titus", "guests", "other"];
 
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-extra');
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+puppeteer.use(StealthPlugin());
 const xml2js = require('xml2js');
 const he = require('he');
 const axios = require('axios');
