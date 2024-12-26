@@ -74,9 +74,17 @@ for (let x = 0; x < 10; x++) {
         const url = `https://www.youtube.com/watch?v=${videoId}`;
         const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', `--disable-setuid-sandbox`] });
         const page = await browser.newPage();
+        page.on('console', msg => console.log('PAGE LOG:', msg.text()));
 
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
         await page.goto(url, { waitUntil: 'networkidle2' });
-        
+        await page.waitForFunction('window.ytplayer !== undefined', { timeout: 10000 });
+
+        await page.screenshot({ path: 'screenshot.png' });
+        const htmlContent = await page.content();
+        fs.writeFileSync('page.html', htmlContent);
+
+
         const captionsUrl = await page.evaluate(() => {
             if (window.ytplayer && window.ytplayer.config && window.ytplayer.config.args) {
                 const rawPlayerResponse = window.ytplayer.config.args.raw_player_response;
