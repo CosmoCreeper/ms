@@ -21,7 +21,7 @@ const fs = require('fs');
 for (let x = 0; x < 10; x++) {
     console.clear();
 
-    const API_KEY = process.env.API_KEY;
+    const API_KEY = "AIzaSyBION9WS3QT9u-Qikf6I7KO-QiIvjaC5Bw";
     let PLAYLIST_ID = IDs[x];
     if (PLAYLIST_ID === "") PLAYLIST_ID = "PLDgRNhRk716aAzsef8-FSiybk9_BSz02C";
 
@@ -72,14 +72,11 @@ for (let x = 0; x < 10; x++) {
 
     async function getCaptions(videoId) {
         const url = `https://www.youtube.com/watch?v=${videoId}`;
-        const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
+        const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', `--disable-setuid-sandbox`] });
         const page = await browser.newPage();
 
         await page.goto(url, { waitUntil: 'networkidle2' });
-        await page.waitForTimeout(1000);
-
-        console.log(`Page: ${JSON.stringify(page)}`);
-
+        
         const captionsUrl = await page.evaluate(() => {
             if (window.ytplayer && window.ytplayer.config && window.ytplayer.config.args) {
                 const rawPlayerResponse = window.ytplayer.config.args.raw_player_response;
