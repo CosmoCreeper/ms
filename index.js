@@ -78,7 +78,7 @@ for (let x = 0; x < 10; x++) {
 
         await page.goto(url, { waitUntil: 'networkidle2' });
 
-        console.log(page);
+        console.log(`Page: ${page}`);
 
         const captionsUrl = await page.evaluate(() => {
             console.log(window.ytplayer);
@@ -96,8 +96,6 @@ for (let x = 0; x < 10; x++) {
             }
             return null; // Return null if no captions are found
         });
-
-        console.log(captionsUrl);
 
         let plain = [];
 
