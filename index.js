@@ -74,7 +74,7 @@ for (let x = 0; x < 10; x++) {
 
     async function getCaptions(videoId) {
         const url = `https://www.youtube.com/watch?v=${videoId}`;
-        const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', `--disable-setuid-sandbox`] });
+        const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', `--disable-setuid-sandbox`, "--enable-unsafe-swiftshader"] });
         const page = await browser.newPage();
         page.on('console', msg => console.log('PAGE LOG:', msg.text()));
 
