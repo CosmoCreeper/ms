@@ -1,4 +1,4 @@
-const prefix = 'https://raw.githubusercontent.com/CosmoCreeper/prss/refs/heads/main/';
+const prefix = 'https://raw.githubusercontent.com/CosmoCreeper/prss/refs/heads/main/data/';
 const suffix = '.json';
 
 const searchBar = document.getElementById("searchbar");
