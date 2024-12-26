@@ -1,6 +1,5 @@
 const IDs = [
     "PLDgRNhRk716aSkNKUhXQFweV-q9lQcHYz",
-    "PLDgRNhRk716aAzsef8-FSiybk9_BSz02C",
     "PLDgRNhRk716ZHJ16VQ5nvnzldXgWwNkbl",
     "PLDgRNhRk716Z6kWZFSGuX1M5L6WUW51mJ",
     "PLDgRNhRk716bwqel43HQDVSMxJ-yiyybL",
@@ -9,8 +8,9 @@ const IDs = [
     "PLDgRNhRk716aEdkOU0T5ep5sk1gs2_-sz",
     "PLDgRNhRk716Z5f7Gz6jIangS3zwfVDw4Z",
     "PLDgRNhRk716b7Su_PE4CuqbiHE8cJaO3n",
+    "PLDgRNhRk716aAzsef8-FSiybk9_BSz02C",
 ];
-const CNs = ["1samuel", "other", "jeremiah", "revelation", "hebrews", "specials", "2thessalonians", "luke", "titus", "guests"];
+const CNs = ["1samuel", "jeremiah", "revelation", "hebrews", "specials", "2thessalonians", "luke", "titus", "guests", "other"];
 
 for (let x = 0; x < 10; x++) {
     console.clear();
@@ -125,7 +125,7 @@ for (let x = 0; x < 10; x++) {
         return plain;
     }
 
-    await (async () => {
+    (async () => {
         const rawVideoDetails = await getVideoDetails(PLAYLIST_ID);
         const videoDetails = await rawVideoDetails.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
         console.log(`Retrieved video IDs of playlist ${IDs[x]}.`);
@@ -133,6 +133,8 @@ for (let x = 0; x < 10; x++) {
         let allTranscripts = ''; // String to accumulate all transcripts
         const transcriptsJSON = [];
         let currTranscript = 0;
+
+        let noneFound = false;
 
         if (existingJSON.length > 0) {
             const vD = videoDetails.filter(video => 
@@ -211,7 +213,7 @@ for (let x = 0; x < 10; x++) {
                 }
             } else {
                 console.log("No new videos to process.");
-                process.exit(0);
+                noneFound = true;
             }
         } else {
             for (const videoObj of videoDetails) {
@@ -270,7 +272,7 @@ for (let x = 0; x < 10; x++) {
         allTranscripts += "\n";
 
         // After processing all videos, save the accumulated transcripts to the output file
-        if (allTranscripts) {
+        if (allTranscripts && !noneFound) {
             fs.unlinkSync(COMPLETED_TRANSCRIPTS_FILE);
             fs.writeFileSync("data/" + TRANSCRIPTS_OUTPUT_FILE + ".json", JSON.stringify(transcriptsJSON));
             console.log(`\nAll transcripts saved to ${TRANSCRIPTS_OUTPUT_FILE}.`);
