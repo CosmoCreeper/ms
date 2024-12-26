@@ -72,11 +72,10 @@ for (let x = 0; x < 10; x++) {
 
     async function getCaptions(videoId) {
         const url = `https://www.youtube.com/watch?v=${videoId}`;
-        const browser = await puppeteer.launch({ headless: false, args: ['--no-sandbox'] });
+        const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
         const page = await browser.newPage();
 
         await page.goto(url, { waitUntil: 'networkidle2' });
-        await page.waitForSelector('#video-title');
         await page.waitForTimeout(1000);
 
         console.log(`Page: ${JSON.stringify(page)}`);
