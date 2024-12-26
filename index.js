@@ -12,6 +12,12 @@ const IDs = [
 ];
 const CNs = ["1samuel", "jeremiah", "revelation", "hebrews", "specials", "2thessalonians", "luke", "titus", "guests", "other"];
 
+const puppeteer = require('puppeteer');
+const xml2js = require('xml2js');
+const he = require('he');
+const axios = require('axios');
+const fs = require('fs');
+
 for (let x = 0; x < 10; x++) {
     console.clear();
 
@@ -23,14 +29,7 @@ for (let x = 0; x < 10; x++) {
     let TRANSCRIPTS_OUTPUT_FILE = CNs[x];
     if (TRANSCRIPTS_OUTPUT_FILE === "") TRANSCRIPTS_OUTPUT_FILE = `${PLAYLIST_ID}.transcripts.txt`;
 
-
     console.clear();
-
-    const puppeteer = require('puppeteer');
-    const xml2js = require('xml2js');
-    const he = require('he');
-    const axios = require('axios');
-    const fs = require('fs');
 
     // Load completed transcripts from file
     let completedTranscripts = [];
@@ -73,13 +72,16 @@ for (let x = 0; x < 10; x++) {
 
     async function getCaptions(videoId) {
         const url = `https://www.youtube.com/watch?v=${videoId}`;
-        const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
+        const browser = await puppeteer.launch({ headless: false, args: ['--no-sandbox'] });
         const page = await browser.newPage();
 
         await page.goto(url, { waitUntil: 'networkidle2' });
+        await page.waitForSelector('#video-title');
+        await page.waitForTimeout(1000);
+
+        console.log(`Page: ${JSON.stringify(page)}`);
 
         const captionsUrl = await page.evaluate(() => {
-            console.log(global.ytplayer);
             if (window.ytplayer && window.ytplayer.config && window.ytplayer.config.args) {
                 const rawPlayerResponse = window.ytplayer.config.args.raw_player_response;
                 if (rawPlayerResponse && rawPlayerResponse.captions) {
