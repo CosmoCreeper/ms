@@ -74,8 +74,8 @@ for (let x = 0; x < 10; x++) {
 
     async function getCaptions(videoId) {
         const url = `https://www.youtube.com/watch?v=${videoId}`;
-        const transcriptRe = require("youtube-transcript");
-        console.log(transcriptRe.fetchTranscript(url));
+        const {getTranscript} = require("youtube-transcript");
+        console.log(await getTranscript(url));
         const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', `--disable-setuid-sandbox`, "--enable-unsafe-swiftshader"], executablePath: puppeteer.executablePath() });
         const page = await browser.newPage();
         page.on('console', msg => console.log('PAGE LOG:', msg.text()));
