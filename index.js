@@ -78,18 +78,14 @@ for (let x = 0; x < 10; x++) {
 
         await page.goto(url, { waitUntil: 'networkidle2' });
 
-        console.log(`Page: ${page}`);
+        console.log(`Page: ${JSON.stringify(page)}`);
 
         const captionsUrl = await page.evaluate(() => {
-            console.log(window.ytplayer);
             if (window.ytplayer && window.ytplayer.config && window.ytplayer.config.args) {
                 const rawPlayerResponse = window.ytplayer.config.args.raw_player_response;
-                console.log(rawPlayerResponse);
                 if (rawPlayerResponse && rawPlayerResponse.captions) {
                     const captionTracks = rawPlayerResponse.captions.playerCaptionsTracklistRenderer.captionTracks;
-                    console.log(captionTracks);
                     if (captionTracks && captionTracks.length > 0) {
-                        console.log(captionTracks[0].baseUrl);
                         return captionTracks[0].baseUrl; // Return the first caption track URL
                     }
                 }
