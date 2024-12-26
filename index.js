@@ -16,9 +16,6 @@ for (let x = 0; x < 10; x++) {
     console.clear();
 
     const API_KEY = process.env.API_KEY;
-    for (let i = 0; i < API_KEY.length; i++) {
-        console.log(API_KEY.charAt(i));
-    }
     let PLAYLIST_ID = IDs[x];
     if (PLAYLIST_ID === "") PLAYLIST_ID = "PLDgRNhRk716aAzsef8-FSiybk9_BSz02C";
 
@@ -81,18 +78,26 @@ for (let x = 0; x < 10; x++) {
 
         await page.goto(url, { waitUntil: 'networkidle2' });
 
+        console.log(page);
+
         const captionsUrl = await page.evaluate(() => {
+            console.log(window.ytplayer);
             if (window.ytplayer && window.ytplayer.config && window.ytplayer.config.args) {
                 const rawPlayerResponse = window.ytplayer.config.args.raw_player_response;
+                console.log(rawPlayerResponse);
                 if (rawPlayerResponse && rawPlayerResponse.captions) {
                     const captionTracks = rawPlayerResponse.captions.playerCaptionsTracklistRenderer.captionTracks;
+                    console.log(captionTracks);
                     if (captionTracks && captionTracks.length > 0) {
+                        console.log(captionTracks[0].baseUrl);
                         return captionTracks[0].baseUrl; // Return the first caption track URL
                     }
                 }
             }
             return null; // Return null if no captions are found
         });
+
+        console.log(captionsUrl);
 
         let plain = [];
 
