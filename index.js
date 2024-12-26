@@ -128,7 +128,7 @@ for (let x = 0; x < 10; x++) {
     (async () => {
         const rawVideoDetails = await getVideoDetails(PLAYLIST_ID);
         const videoDetails = await rawVideoDetails.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-        console.log("Retrieved video IDs.");
+        console.log(`Retrieved video IDs of playlist ${IDs[x]}.`);
         console.log(`0/${videoDetails.length} transcripts are completed.\n`);
         let allTranscripts = ''; // String to accumulate all transcripts
         const transcriptsJSON = [];
