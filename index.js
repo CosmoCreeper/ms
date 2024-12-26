@@ -23,7 +23,7 @@ const fs = require('fs');
 for (let x = 0; x < 10; x++) {
     console.clear();
 
-    const API_KEY = "AIzaSyBION9WS3QT9u-Qikf6I7KO-QiIvjaC5Bw";
+    const API_KEY = process.env.API_KEY;
     let PLAYLIST_ID = IDs[x];
     if (PLAYLIST_ID === "") PLAYLIST_ID = "PLDgRNhRk716aAzsef8-FSiybk9_BSz02C";
 
