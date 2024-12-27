@@ -12,18 +12,21 @@ const IDs = [
 ];
 const CNs = ["1samuel", "jeremiah", "revelation", "hebrews", "specials", "2thessalonians", "luke", "titus", "guests", "other"];
 
-const puppeteer = require('puppeteer-extra');
+/* const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
-puppeteer.use(StealthPlugin());
-const xml2js = require('xml2js');
+puppeteer.use(StealthPlugin()); */
+/* const xml2js = require('xml2js'); */
 const he = require('he');
 const axios = require('axios');
 const fs = require('fs');
 
+const { YoutubeTranscript } = require("youtube-transcript");
+
+const API_KEY = "AIzaSyBION9WS3QT9u-Qikf6I7KO-QiIvjaC5Bw";
+
 for (let x = 0; x < 10; x++) {
     console.clear();
 
-    const API_KEY = process.env.API_KEY;
     let PLAYLIST_ID = IDs[x];
     if (PLAYLIST_ID === "") PLAYLIST_ID = "PLDgRNhRk716aAzsef8-FSiybk9_BSz02C";
 
@@ -73,20 +76,7 @@ for (let x = 0; x < 10; x++) {
     }
 
     async function getCaptions(videoId) {
-        const url = `https://www.youtube.com/watch?v=${videoId}`;
-        const test = "https://www.searchapi.io/api/v1/search";
-const params = {
-  "engine": "youtube_transcripts",
-  "video_id": "RuFdirOTpS4"
-};
-
-axios.get(test, { params })
-  .then(response => {
-    console.log(response.data);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
+/*         const url = `https://www.youtube.com/watch?v=${videoId}`;
         const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', `--disable-setuid-sandbox`, "--enable-unsafe-swiftshader"], executablePath: puppeteer.executablePath() });
         const page = await browser.newPage();
         page.on('console', msg => console.log('PAGE LOG:', msg.text()));
@@ -111,17 +101,20 @@ axios.get(test, { params })
                 }
             }
             return null; // Return null if no captions are found
-        });
+        }); */
 
         let plain = [];
 
-        if (captionsUrl) {
+        let captions;
+        await YoutubeTranscript.fetchTranscript(videoId).then((el) => captions = el);
+        console.log(YoutubeTranscript.fetchTranscript(videoId))
+        if (captions) {
             try {
-                const response = await page.goto(captionsUrl, { waitUntil: 'networkidle2' });
-                const xmlText = await response.text(); // Get the XML text
+                /* const response = await page.goto(captionsUrl, { waitUntil: 'networkidle2' });
+                const xmlText = await response.text(); // Get the XML text */
 
                 // Parse the XML
-                await xml2js.parseString(xmlText, (err, result) => {
+/*                 await xml2js.parseString(xmlText, (err, result) => {
                     if (err) {
                         console.error('Error parsing XML:', err);
                     } else {
@@ -135,7 +128,16 @@ axios.get(test, { params })
                             plain.push([start, text]);
                         });
                     }
-                });
+                }); */
+                for (const line of captions) {
+                    console.log(line);
+                    const start = line["offset"];
+                    let text;
+                    if (line["text"]) {
+                        text = he.decode(he.decode(line["text"]) + " ");
+                    }
+                    plain.push([start, text]);
+                }
             } catch (error) {
                 console.error('Error fetching captions:', error);
             }
@@ -143,7 +145,7 @@ axios.get(test, { params })
             console.log(`No captions URL found for video ID: ${videoId}`);
         }
 
-        await browser.close();
+        /* await browser.close(); */
         return plain;
     }
 
@@ -301,3 +303,4 @@ axios.get(test, { params })
         }
     })();
 }
+
