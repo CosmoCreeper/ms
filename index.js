@@ -20,9 +20,9 @@ const he = require('he');
 const axios = require('axios');
 const fs = require('fs');
 
-const { YoutubeTranscript } = require("youtube-transcript");
+const TranscriptAPI = require("youtube-transcript-api");
 
-const API_KEY = "AIzaSyBION9WS3QT9u-Qikf6I7KO-QiIvjaC5Bw";
+const API_KEY = process.env.API_KEY;
 
 for (let x = 0; x < 10; x++) {
     console.clear();
@@ -106,8 +106,7 @@ for (let x = 0; x < 10; x++) {
         let plain = [];
 
         let captions;
-        await YoutubeTranscript.fetchTranscript(videoId).then((el) => captions = el);
-        console.log(YoutubeTranscript.fetchTranscript(videoId))
+        await TranscriptAPI.getTranscript(videoId).then((el) => captions = el);
         if (captions) {
             try {
                 /* const response = await page.goto(captionsUrl, { waitUntil: 'networkidle2' });
@@ -130,11 +129,10 @@ for (let x = 0; x < 10; x++) {
                     }
                 }); */
                 for (const line of captions) {
-                    console.log(line);
-                    const start = line["offset"];
+                    const start = line["start"];
                     let text;
                     if (line["text"]) {
-                        text = he.decode(he.decode(line["text"]) + " ");
+                        text = line["text"] + " ";
                     }
                     plain.push([start, text]);
                 }
@@ -303,4 +301,3 @@ for (let x = 0; x < 10; x++) {
         }
     })();
 }
-
