@@ -1,3 +1,3 @@
 # The FBC Sermon Search
 The demo has been completed.
-Two weeks until full release.
+The project is scheduled to be completed on Jan. 12th, 2025.
