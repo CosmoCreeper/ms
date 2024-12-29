@@ -1,2 +1,3 @@
 # The FBC Sermon Search
-Data files have been moved to the ./data/ directory.
+The demo has been completed.
+Two weeks until full release.
