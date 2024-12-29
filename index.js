@@ -185,6 +185,8 @@ for (let x = 0; x < 10; x++) {
                 for (const videoObj of newVideoDetails) {
                     currTranscript++;
 
+                    if (videoObj.videoId === "5W5xiaEhK9M" || videoObj.videoId === "KQvhm6KpBOg" || videoObj.videoId === "eqA-3qW-i8k") continue;
+
                     // Skip already completed transcripts
                     if (completedTranscripts.includes(videoObj.videoId)) {
                         console.log(`Skipping already completed transcript for video ID: ${videoObj.videoId}`);
@@ -240,6 +242,8 @@ for (let x = 0; x < 10; x++) {
         } else {
             for (const videoObj of videoDetails) {
                 currTranscript++;
+
+                if (videoObj.videoId === "5W5xiaEhK9M" || videoObj.videoId === "KQvhm6KpBOg" || videoObj.videoId === "eqA-3qW-i8k") continue;
             
                 // Skip already completed transcripts
                 if (completedTranscripts.includes(videoObj.videoId)) {
