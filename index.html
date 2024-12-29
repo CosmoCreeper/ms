@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FBC Sermon Search</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="assets/moment.js"></script>
+</head>
+<body>
+    <div id="container">
+        <div class="logo-container">
+            <svg onclick="loadFBC()" class="logo" preserveAspectRatio="xMidYMid meet" data-bbox="0.595 0.694 32.311 32.306" viewBox="0.595 0.694 32.311 32.306" xmlns="http://www.w3.org/2000/svg" data-type="color" role="presentation" aria-hidden="true" aria-label="">
+                <g>
+                    <path d="M16.6 33h1.3V15.7h6.2v-2.4h-6.2V6.5h-2.3v6.8H9.4v2.4h6.2v14.7c-7.5-.7-13-7.3-12.4-14.8.7-7.5 7.3-13 14.8-12.4 7.5.7 13 7.3 12.4 14.8-.5 6-5 11-11 12.2v2.5c8.8-1.5 14.7-9.8 13.3-18.6C31.2 5.4 22.9-.5 14.1.9 5.3 2.4-.6 10.7.8 19.5c1.3 7.7 8 13.4 15.8 13.5z" fill="#165f7e" data-color="1"></path>
+                </g>
+            </svg>
+        </div>
+        <div id="lookup">
+            <div id="upper-search">
+                <h1 class="title">Sermon Search</h1>
+                <div id="search-container">
+                    <input placeholder="Enter keywords..." id="searchbar" type="text">
+                    <div id="search-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                        </svg>
+                    </div>
+                    <div id="filter-grid">
+                        <div id="dropdowns">
+                            <div class="dropdown">
+                                <div class="cover" id="upload-button">
+                                    <span id="upload-full">Upload Date: <span class="value" id="upload">Any Time</span></span>
+                                    <img id="upload-img" src="assets/arrow-down.svg" width="15">
+                                </div>
+                                <div id="upload-content" class="content" style="display: none;">
+                                    <span class="description">Select date</span>
+                                    <div id="upload-title">Custom Range</div>
+                                    <hr>
+                                    <input id="start-date" type="date" placeholder="Start date" onchange="displayUpload(); resetSearch();"/>
+                                    <div id="end-date-con">
+                                        <input type="date" id="end-date" placeholder="End date" onchange="displayUpload(); resetSearch();"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown">
+                                <div class="cover" id="books-button">
+                                    <span id="books-full">Book(s): <span class="value" id="books">All</span></span>
+                                    <img id="books-img" src="assets/arrow-down.svg" width="15">
+                                </div>
+                                <div id="books-content" class="content" style="display: none;">
+                                    <div class="testament-selection" id="oldtestament" onclick="toggleTestament('Old Testament');">Old Testament</div>
+                                    <div class="book" id="1samuel" onclick="toggleBook('1 Samuel'); this.classList.toggle('checked')" id="">1 Samuel</div>
+                                    <div class="book" id="jeremiah" onclick="toggleBook('Jeremiah'); this.classList.toggle('checked')">Jeremiah</div>
+                                    <hr>
+                                    <div class="testament-selection" id="newtestament" onclick="toggleTestament('New Testament');">New Testament</div>
+                                    <div class="book" id="luke" onclick="toggleBook('Luke'); this.classList.toggle('checked')">Luke</div>
+                                    <div class="book" id="2thessalonians" onclick="toggleBook('2 Thessalonians'); this.classList.toggle('checked')">2 Thessalonians</div>
+                                    <div class="book" id="titus" onclick="toggleBook('Titus'); this.classList.toggle('checked')">Titus</div>
+                                    <div class="book" id="hebrews" onclick="toggleBook('Hebrews'); this.classList.toggle('checked')">Hebrews</div>
+                                    <div class="book" id="revelation" onclick="toggleBook('Revelation'); this.classList.toggle('checked')">Revelation</div>
+                                </div>
+                            </div>
+                            <div class="dropdown">
+                                <div class="cover" id="sort-button">
+                                    <span id="sort-full">Sort by: <span class="value" id="sort">New</span></span>
+                                    <img id="sort-img" src="assets/arrow-down.svg" width="15">
+                                </div>
+                                <div id="sort-content" class="content" style="display: none;">
+                                    <span class="description">Select sort</span>
+                                    <div class="options">
+                                        <div class="clickable checked" id="new">New</div>
+                                        <div class="clickable" id="old">Old</div>
+                                        <div class="clickable" id="top">Top</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="pastors">
+                            <div class="pastor" id="rob" onclick="togglePastor('rob')">Rob</div>
+                            <div class="pastor" id="mark" onclick="togglePastor('mark')">Mark</div>
+                            <div class="pastor" id="greg" onclick="togglePastor('greg')">Greg</div>
+                            <div class="pastor" id="guests" onclick="togglePastor('guests')">Guests</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div id="contents">
+
+            </div>
+        </div>
+        <div id="miniplayer" style="display: none;">
+            <div id="miniplayer-close">
+                <svg onclick="closeMiniplayer()" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                </svg>
+            </div>
+            <iframe src="https://www.youtube.com/embed/RuFdirOTpS4?autoplay=1&start=1&enablejsapi=1" id="video" title="FBC Sermon Viewport" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div id="resize-handle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bounding-box" viewBox="0 0 16 16">
+                <path d="M5 2V0H0v5h2v6H0v5h5v-2h6v2h5v-5h-2V5h2V0h-5v2zm6 1v2h2v6h-2v2H5v-2H3V5h2V3zm1-2h3v3h-3zm3 11v3h-3v-3zM4 15H1v-3h3zM1 4V1h3v3z"/>
+              </svg></div>
+            <div id="drag-overlay"></div>
+            <!-- <div id="transcript-sync" style="display: none;"></div> -->
+        </div>
+    </div>
+
+    <a href="https://cosmocreeper.github.io/pastorrob" id="soundboard" style="display: none;">Pastor Rob Soundboard</a>
+    <a href="https://faithbiblemd.org/" id="fbc" style="display: none;">Faith Bible Church</a>
+
+    <div id="scroll-to-top" style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/>
+        </svg>
+    </div>
+
+    <div id="screen" style="display: none;">
+        <div id="yapdollar">
+            <img id="slideshow"/>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
