@@ -22,7 +22,7 @@ const fs = require('fs');
 
 const TranscriptAPI = require("youtube-transcript-api");
 
-const API_KEY = process.env.API_KEY
+const API_KEY = process.env.API_KEY;
 
 for (let x = 0; x < 11; x++) {
     console.clear();
@@ -177,7 +177,7 @@ for (let x = 0; x < 11; x++) {
             let allTranscripts = ''; // String to accumulate all transcripts
             let currTranscript = 0;
 
-            let noneFound = false;
+            let noneFound = true;
 
             if (existingJSON.length > 0) {
                 const vD = videoDetails.filter(video => 
@@ -217,6 +217,7 @@ for (let x = 0; x < 11; x++) {
                         try {
                             const transcript = await getCaptions(videoObj.videoId);
                             if (transcript) {
+                                noneFound = false;
                                 transcriptsJSON.push({"id": videoObj.videoId, "name": videoObj.title, "date": videoObj.publishedAt, "transcript": transcript});
                             
                                 const videoName = `Video: https://youtube.com/watch?v=${videoObj.videoId}`;
@@ -258,7 +259,6 @@ for (let x = 0; x < 11; x++) {
                     }
                 } else {
                     console.log("No new videos to process.");
-                    noneFound = true;
                 }
             } else {
                 for (const videoObj of videoDetails) {
@@ -275,6 +275,7 @@ for (let x = 0; x < 11; x++) {
                     try {
                         const transcript = await getCaptions(videoObj.videoId);
                         if (transcript) {
+                            noneFound = false;
                             transcriptsJSON.push({"id": videoObj.videoId, "name": videoObj.title, "date": videoObj.publishedAt, "transcript": transcript});
                         
                             const videoName = `Video: https://youtube.com/watch?v=${videoObj.videoId}`;
@@ -319,7 +320,7 @@ for (let x = 0; x < 11; x++) {
             allTranscripts += "\n";
 
             // After processing all videos, save the accumulated transcripts to the output file
-            if (allTranscripts && !noneFound && CNs[x] !== "live") {
+            if (allTranscripts && !noneFound) {
                 fs.unlinkSync(COMPLETED_TRANSCRIPTS_FILE);
                 fs.writeFileSync("data/" + TRANSCRIPTS_OUTPUT_FILE + ".json", JSON.stringify(transcriptsJSON));
                 console.log(`\nAll transcripts saved to ${TRANSCRIPTS_OUTPUT_FILE}.`);
