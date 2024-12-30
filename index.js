@@ -319,7 +319,7 @@ for (let x = 0; x < 11; x++) {
             allTranscripts += "\n";
 
             // After processing all videos, save the accumulated transcripts to the output file
-            if (allTranscripts && !noneFound) {
+            if (allTranscripts && !noneFound && CNs[x] !== "live") {
                 fs.unlinkSync(COMPLETED_TRANSCRIPTS_FILE);
                 fs.writeFileSync("data/" + TRANSCRIPTS_OUTPUT_FILE + ".json", JSON.stringify(transcriptsJSON));
                 console.log(`\nAll transcripts saved to ${TRANSCRIPTS_OUTPUT_FILE}.`);
