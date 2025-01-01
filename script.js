@@ -150,6 +150,42 @@ const loadMax = window.mobileCheck() ? mSL : dSL;
 
 let other, specials, mark, greg, guests;
 
+let currLoadedSermons = [];
+let currPage = 0;
+let loadedAll = true;
+
+// =================================================================================================
+// UTILITIES
+// =================================================================================================
+const betweenDates = (date) => {
+    const startDateValue = document.getElementById("start-date").value;
+    const endDateValue = document.getElementById("end-date").value;
+
+    let startDate = null;
+    let endDate = null;
+    if (startDateValue !== "") startDate = new Date(startDateValue);
+    if (endDateValue !== "") endDate = new Date(endDateValue);
+
+    const isValidStartDate =
+        startDate instanceof Date && !isNaN(startDate);
+    const isValidEndDate = endDate instanceof Date && !isNaN(endDate);
+            
+    const btwStartDate = isValidStartDate
+        ? targetDate >= startDate
+        : false;
+    const btwEndDate = isValidEndDate ? targetDate <= endDate : false;
+
+    return (
+        (!isValidEndDate && btwStartDate) ||
+        (!isValidStartDate && btwEndDate) ||
+        (btwStartDate && btwEndDate) ||
+        (!isValidStartDate && !isValidEndDate)
+    );
+};
+
+// =================================================================================================
+// Load initial sermon data.
+// =================================================================================================
 (async () => {
     try {
         contents.innerHTML = `<div id="match-count">Loading sermons...</div>`;
@@ -366,15 +402,26 @@ const loadContents = () => {
     }
 };
 
-const loadSermons = (sermons) => {
-    let sermonDiv = ``;
-    for (const el of sermons) {
+const PAGE_SIZE = 20;
+
+const loadSermons = () => {
+    if (loadedAll) return;
+
+    let sermonDiv = currPage !== 0 ? contents.innerHTML : "";
+    for (let i = currPage * PAGE_SIZE; i < (currPage + 1) * PAGE_SIZE && i < currLoadedSermons.length; i++) {
+        const el = currLoadedSermons[i];
         if (!window.mobileCheck()) {
             sermonDiv += `<div class="sermon"><div class="container" onclick="miniplayerLoad('${el.id}', 0)"><div>${el.name}</div></div><div class="sermon-bracket"></div><img class="sermon-thumbnail" onclick="miniplayerLoad('${el.id}', 0)" src="https://i.ytimg.com/vi/${el.id}/mqdefault.jpg"/></div>`;
         } else {
             sermonDiv += `<div class="sermon"><div class="container" onclick="miniplayerLoad('${el.id}', 0)"><div>${el.name}</div><img src="https://i.ytimg.com/vi/${el.id}/mqdefault.jpg" class="mobile-thumbnail" onclick="miniplayerLoad('${el.id}', 0)"/></div></div>`;
         }
     }
+
+    // Need to prevent further loading once we've reached the end.
+    if ((currPage + 1) * PAGE_SIZE >= currLoadedSermons.length) {
+        loadedAll = true;
+    }
+
     contents.innerHTML = sermonDiv;
     document.querySelectorAll(".sermon").forEach((el) => {
         if (!window.mobileCheck())
@@ -396,64 +443,51 @@ const loadSermons = (sermons) => {
     document.querySelectorAll(".sermon-thumbnail").forEach((el) => {
         el.style.height = 0 + "px";
     });
+
+    // Increment current loaded page for further loading by scroll.
+    currPage++;
 };
 
 const search = async () => {
+    // Reset current loaded page.
+    loadedAll = false;
+    currPage = 0;
+
     const keyword = searchBar.value
         .toLowerCase()
-        .replace(/[^a-z0-9 ]/g, "")
+        .replace(/[^a-z0-9 ]/g, "") // Replace invalid characters (why are these invalid??)
         .trim();
     let normalSearch = false;
+
+    // If the search bar is empty, load all sermons (Same as home page).
     if (keyword === "") {
         let sortedSermons = removeDuplicates(await fetchSermons());
         sortBy === "old"
             ? sortedSermons.sort((a, b) => new Date(a.date) - new Date(b.date))
             : sortedSermons.sort((a, b) => new Date(b.date) - new Date(a.date));
-        let sermons = [];
-        for (const sermon of sortedSermons) {
-            const targetDate = new Date(sermon.date);
-            const startDateValue = document.getElementById("start-date").value;
-            const endDateValue = document.getElementById("end-date").value;
+        
+        currLoadedSermons = sortedSermons.filter((sermon) => {
+            return betweenDates(new Date(sermon.date));
+        });
 
-            let startDate = null;
-            let endDate = null;
-
-            if (startDateValue !== "") startDate = new Date(startDateValue);
-            if (endDateValue !== "") endDate = new Date(endDateValue);
-
-            const isValidStartDate =
-                startDate instanceof Date && !isNaN(startDate);
-            const isValidEndDate = endDate instanceof Date && !isNaN(endDate);
-
-            const btwStartDate = isValidStartDate
-                ? targetDate >= startDate
-                : false;
-            const btwEndDate = isValidEndDate ? targetDate <= endDate : false;
-
-            if (
-                (isValidStartDate && !isValidEndDate && btwStartDate) ||
-                (isValidEndDate && !isValidStartDate && btwEndDate) ||
-                (isValidStartDate &&
-                    isValidEndDate &&
-                    btwStartDate &&
-                    btwEndDate) ||
-                (!isValidStartDate && !isValidEndDate)
-            ) {
-                sermons.push(sermon);
-            }
-        }
-        loadSermons(sermons);
+        loadSermons(currLoadedSermons, currPage);
         return;
-    } else if (keyword === "abacabb") {
+    }
+    // Soundboard
+    else if (keyword === "abacabb") {
         results = `<div class="match-count">Cheat code activated.</div>`;
         document.getElementById("soundboard").click();
-    } else if (keyword === "fontnightmare") {
+    }
+    // Papyrus font
+    else if (keyword === "fontnightmare") {
         results = `<div class="match-count">Cheat code activated.</div>`;
         document
             .querySelectorAll("*")
             .forEach((el) => el.classList.add("papyrus"));
         document.querySelector(".title").classList.add("threed");
-    } else if (keyword === "yapdollar") {
+    }
+    // Yap dollar
+    else if (keyword === "yapdollar") {
         results = `<div class="match-count">Cheat code activated.</div>`;
         document.getElementById("screen").style.display = "block";
         searchBar.blur();
@@ -528,7 +562,9 @@ const search = async () => {
         };
         await document.getElementById("funkyyap").load();
         video.src = "";
-    } else if (keyword !== "") {
+    }
+    // Normal search query
+    else if (keyword !== "") {
         normalSearch = true;
         let sermons = removeDuplicates(await fetchSermons());
 
@@ -544,35 +580,8 @@ const search = async () => {
         sermons.forEach((video) => {
             const videoId = video.id;
             const times = [];
-            const targetDate = new Date(video.date);
 
-            const startDateValue = document.getElementById("start-date").value;
-            const endDateValue = document.getElementById("end-date").value;
-
-            let startDate = null;
-            let endDate = null;
-
-            if (startDateValue !== "") startDate = new Date(startDateValue);
-            if (endDateValue !== "") endDate = new Date(endDateValue);
-
-            const isValidStartDate =
-                startDate instanceof Date && !isNaN(startDate);
-            const isValidEndDate = endDate instanceof Date && !isNaN(endDate);
-
-            const btwStartDate = isValidStartDate
-                ? targetDate >= startDate
-                : false;
-            const btwEndDate = isValidEndDate ? targetDate <= endDate : false;
-
-            if (
-                (isValidStartDate && !isValidEndDate && btwStartDate) ||
-                (isValidEndDate && !isValidStartDate && btwEndDate) ||
-                (isValidStartDate &&
-                    isValidEndDate &&
-                    btwStartDate &&
-                    btwEndDate) ||
-                (!isValidStartDate && !isValidEndDate)
-            ) {
+            if (betweenDates(new Date(video.date))) {
                 video.transcript.forEach((entry, idx) => {
                     entryCount++;
                     if (
@@ -634,8 +643,6 @@ const search = async () => {
                 });
             }
         });
-    } else {
-        results = `<div class="match-count">You can't search for empty strings.</div>`;
     }
 
     if (sortBy === "top" && normalSearch)
@@ -668,103 +675,48 @@ searchBar.addEventListener("keydown", (e) => {
     if (e.key === "Enter") resetSearch();
 });
 
-const toggleUpload = (otherWindowsOpen = false) => {
-    if (uploadContent.style.display === "none") {
-        uploadImg.src = `assets/arrow-up.svg`;
-        uploadContent.style.display = "block";
-        document
-            .querySelectorAll(".video")
-            .forEach((el) => (el.style.zIndex = "-1"));
-        document
-            .querySelectorAll(".sermon")
-            .forEach((el) => (el.style.zIndex = "-1"));
-        if (booksContent.style.display === "block") toggleBooks(true);
-        if (sortContent.style.display === "block") toggleSort(true);
+const toggleFilterButton = (img, content, button, otherWindowsOpen) => {
+    if (content.style.display === "none") {
+        img.src = `assets/arrow-up.svg`;
+        content.style.display = "block";
+        // document
+        //     .querySelectorAll(".video")
+        //     .forEach((el) => (el.style.zIndex = "-1"));
+        // document
+        //     .querySelectorAll(".sermon")
+        //     .forEach((el) => (el.style.zIndex = "-1"));
         if (
             window.mobileCheck() &&
             document.getElementById("pastors-content").style.display === "block"
         )
             togglePastors(true);
     } else {
-        uploadImg.src = `assets/arrow-down.svg`;
-        uploadContent.style.display = "none";
-        if (!otherWindowsOpen)
-            document
-                .querySelectorAll(".video")
-                .forEach((el) => (el.style.zIndex = "0"));
-        if (!otherWindowsOpen)
-            document
-                .querySelectorAll(".sermon")
-                .forEach((el) => (el.style.zIndex = "0"));
+        img.src = `assets/arrow-down.svg`;
+        content.style.display = "none";
+        if (!otherWindowsOpen) {
+            // document
+            //     .querySelectorAll(".video")
+            //     .forEach((el) => (el.style.zIndex = "0"));
+            // document
+            //     .querySelectorAll(".sermon")
+            //     .forEach((el) => (el.style.zIndex = "0"));
+        }
     }
     if (!window.mobileCheck())
-        uploadContent.style.width = uploadButton.offsetWidth + "px";
+        content.style.width = button.offsetWidth + "px";
+
+};
+
+const toggleUpload = (otherWindowsOpen = false) => {
+    toggleFilterButton(uploadImg, uploadContent, uploadButton, otherWindowsOpen);
 };
 
 const toggleBooks = (otherWindowsOpen = false) => {
-    if (booksContent.style.display === "none") {
-        booksImg.src = `assets/arrow-up.svg`;
-        booksContent.style.display = "block";
-        document
-            .querySelectorAll(".video")
-            .forEach((el) => (el.style.zIndex = "-1"));
-        document
-            .querySelectorAll(".sermon")
-            .forEach((el) => (el.style.zIndex = "-1"));
-        if (uploadContent.style.display === "block") toggleUpload(true);
-        if (sortContent.style.display === "block") toggleSort(true);
-        if (
-            window.mobileCheck() &&
-            document.getElementById("pastors-content").style.display === "block"
-        )
-            togglePastors(true);
-    } else {
-        booksImg.src = `assets/arrow-down.svg`;
-        booksContent.style.display = "none";
-        if (!otherWindowsOpen)
-            document
-                .querySelectorAll(".video")
-                .forEach((el) => (el.style.zIndex = "0"));
-        if (!otherWindowsOpen)
-            document
-                .querySelectorAll(".sermon")
-                .forEach((el) => (el.style.zIndex = "0"));
-    }
-    if (!window.mobileCheck())
-        booksContent.style.width = booksButton.offsetWidth + "px";
+    toggleFilterButton(booksImg, booksContent, booksButton, otherWindowsOpen);
 };
 
 const toggleSort = (otherWindowsOpen = false) => {
-    if (sortContent.style.display === "none") {
-        sortImg.src = `assets/arrow-up.svg`;
-        sortContent.style.display = "block";
-        document
-            .querySelectorAll(".video")
-            .forEach((el) => (el.style.zIndex = "-1"));
-        document
-            .querySelectorAll(".sermon")
-            .forEach((el) => (el.style.zIndex = "-1"));
-        if (uploadContent.style.display === "block") toggleUpload(true);
-        if (booksContent.style.display === "block") toggleBooks(true);
-        if (
-            window.mobileCheck() &&
-            document.getElementById("pastors-content").style.display === "block"
-        )
-            togglePastors(true);
-    } else {
-        sortImg.src = `assets/arrow-down.svg`;
-        sortContent.style.display = "none";
-        if (!otherWindowsOpen)
-            document
-                .querySelectorAll(".video")
-                .forEach((el) => (el.style.zIndex = "0"));
-        if (!otherWindowsOpen)
-            document
-                .querySelectorAll(".sermon")
-                .forEach((el) => (el.style.zIndex = "0"));
-    }
-    if (!window.mobileCheck())
-        sortContent.style.width = sortButton.offsetWidth + "px";
+    toggleFilterButton(sortImg, sortContent, sortButton, otherWindowsOpen);
 };
 
 const togglePastors = (otherWindowsOpen = false) => {
@@ -820,37 +772,35 @@ uploadButton.addEventListener("click", () => toggleUpload());
 booksButton.addEventListener("click", () => toggleBooks());
 sortButton.addEventListener("click", () => toggleSort());
 
-document.getElementById("new").addEventListener("click", (e) => {
+const checkboxes = ['old', 'new', 'top'];
+
+const toggleCheckbox = (e, type) => {
     if (!e.target.classList.contains("checked"))
         e.target.classList.add("checked");
-    sortBy = "new";
-    document.getElementById("old").classList.remove("checked");
-    document.getElementById("top").classList.remove("checked");
+    sortBy = type;
+
+    // Uncheck other checkboxes
+    checkboxes.forEach((checkbox) => {
+        if (checkbox !== type) {
+            document.getElementById(checkbox).classList.remove("checked");
+        }
+    });
+
     if (!window.mobileCheck())
-        document.getElementById("sort").textContent = "New";
+        document.getElementById("sort").textContent = type.charAt(0).toUpperCase() + type.slice(1);
     resetSearch();
+};
+
+document.getElementById("new").addEventListener("click", (e) => {
+    toggleCheckbox(e, 'new');
 });
 
 document.getElementById("old").addEventListener("click", (e) => {
-    if (!e.target.classList.contains("checked"))
-        e.target.classList.add("checked");
-    sortBy = "old";
-    document.getElementById("new").classList.remove("checked");
-    document.getElementById("top").classList.remove("checked");
-    if (!window.mobileCheck())
-        document.getElementById("sort").textContent = "Old";
-    resetSearch();
+    toggleCheckbox(e, 'old');
 });
 
 document.getElementById("top").addEventListener("click", (e) => {
-    if (!e.target.classList.contains("checked"))
-        e.target.classList.add("checked");
-    sortBy = "top";
-    document.getElementById("new").classList.remove("checked");
-    document.getElementById("old").classList.remove("checked");
-    if (!window.mobileCheck())
-        document.getElementById("sort").textContent = "Top";
-    resetSearch();
+    toggleCheckbox(e, 'top');
 });
 
 document.getElementById("search-button").addEventListener("click", resetSearch);
@@ -1151,6 +1101,11 @@ const scrollFunction = () => {
         document.getElementById("scroll-to-top").style.display = "block";
     } else {
         document.getElementById("scroll-to-top").style.display = "none";
+    }
+
+    // If we reach the bottom of the page, load more sermons.
+    if (searchBar.value === "" && (window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight) {
+        loadSermons();
     }
 };
 
