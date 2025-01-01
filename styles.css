@@ -152,12 +152,11 @@ body {
 }
 
 #upper-search {
-    height: 150px;
+    display: block;
 }
 
 #lookup hr {
     border: 1.4px solid black;
-    width: 926px;
 }
 
 #search-container {
@@ -222,24 +221,20 @@ body {
 }
 
 #filter-grid {
-    height: 48px;
-    width: 920px;
+    margin-top: 5px;
+    width: 100%;
     position: relative;
     color: black;
-}
-
-#filter-grid div {
-    display: inline;
+    display: flex;
 }
 
 #dropdowns {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    display: flex;
 }
 
 .dropdown {
     position: relative;
+    display: inline-block;
     z-index: 100;
 }
 
@@ -272,12 +267,12 @@ body {
 
 .dropdown .content {
     position: absolute;
-    top: 35px;
+    z-index: 100;
+    top: 40px;
     left: 5px;
-    background-color: rgb(217, 217, 217);
-    height: 200px;
+    background-color: rgb(255, 255, 255);
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .dropdown hr {
@@ -360,8 +355,8 @@ body {
     color: black;
 }
 
-#end-date-con {
-    text-align: right;
+#upload-dates {
+    display: flex;
 }
 
 .dropdown input[type="text"], .dropdown input[type="date"] {
@@ -456,14 +451,13 @@ body {
 }
 
 #pastors {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    gap: 5px;
 }
 
 .pastor {
-    width: 50px;
     border: 1px solid #5D8B9E;
     border-radius: 8px;
     margin: 1px;
@@ -621,9 +615,8 @@ body {
 
 .sermon {
     display: grid;
-    grid-template-columns: 40vw auto 50px;
+    grid-template-columns: calc(100% - (13px + 180px)) 13px 180px;
     position: relative;
-    width: calc(40vw + 58px);
     margin-top: 20px;
     margin-bottom: 20px;
     min-height: 100px;
@@ -635,7 +628,6 @@ body {
 
 .container {
     background-color: rgba(217, 217, 217, 0.5);
-    width: calc(40vw - 5px);
     font-family: "Poppins";
     position: relative;
     font-size: 16px;
@@ -646,15 +638,16 @@ body {
     background-color: #D9D9D9;
 }
 
-.container div {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+.container div:first-child {
+    display: flex;
+    align-items: center;
+    height: 100%;
     padding-right: 10px;
     padding-left: 20px;
 }
 
 .sermon-bracket {
+    margin-left: 5px;
     border-left: 3px solid black;
 }
 
@@ -663,7 +656,6 @@ body {
 }
 
 #search-line {
-    width: 928.667px;
     position: relative;
 }
 
@@ -693,20 +685,17 @@ body {
 }
 
 @media screen and (max-width: 1135px) {
-    #search-line {
-        width: calc(90vw + 10px);
-    }
-
     #search-right {
         position: relative;
         width: 100%;
         height: 42px;
+
     }
 
     #livestream {
         display: block;
         position: relative;
-        width: calc(90vw - 15px);
+        width: 100%;
         padding-left: 0;
         padding-right: 0;
         border-radius: 28px;
@@ -730,9 +719,7 @@ body {
         height: 80px;
         cursor: pointer;
         transition: all 100ms ease;
-        margin: 0;
-        position: absolute;
-        right: 0;
+        margin-left: auto;
     }
 
     .mobile-thumbnail:hover {
@@ -740,15 +727,10 @@ body {
     }
 
     .container {
+        display: flex;
         font-size: 12px;
-        width: calc(90vw - 8px);
+        width: 100%;
         min-height: 80px;
-        margin: 0;
-        position: relative;
-    }
-
-    .container div {
-        width: 49%;
     }
 
     #contents {
@@ -770,24 +752,15 @@ body {
     .logo {
         width: 58px;
         height: 61px;
-        transform: translateX(-50%);
-        margin: 0;
         display: inline-block;
-        position: absolute;
-        left: 5px;
-        top: 50%;
-        transform: translateY(-50%);
+        margin-left: auto;
     }
 
     .title {
         display: inline-block;
-        margin: 0;
-        margin-left: 75px;
         font-size: 35px;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
         line-height: 61px;
+        margin-right: auto;
     }
 
     #container {
@@ -827,13 +800,10 @@ body {
     }
 
     .mobile-title {
-        position: absolute;
-        top: 20px;
-        left: 10px;
-        width: 90%;
-        margin-left: 50%;
-        transform: translateX(-50%);
-        position: relative;
+        width: 100%;
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
         height: 58px;
     }
 
