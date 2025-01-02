@@ -1182,7 +1182,7 @@ const credits = () => {
         <div id='match-count'>CREDITS:</div>
         <div class='bold'>Lead Designer: Michael Latham</div>
         <div class='bold'>Lead Programmer: Solomon Latham</div>
-        <div class='bold'>Advice: Lucius Latham</div>
+        <div class='bold'>Advice and Programmer: Lucius Latham</div>
         <div class='bold'>Commercial Directors: Michael and Christian Latham</div>
         <div class='bold'>Main Actor: Garrett Davis</div>
         <div class='bold-text'>Additional Credit to:</div>
