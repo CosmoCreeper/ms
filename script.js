@@ -424,9 +424,6 @@ const loadSermons = () => {
 
     contents.innerHTML = sermonDiv;
     document.querySelectorAll(".sermon").forEach((el) => {
-        if (!window.mobileCheck())
-            el.style.height = el.children[0].children[0].offsetHeight + "px";
-        else el.style.height = el.children[0].offsetHeight + "px";
         if (
             uploadContent.style.display === "block" ||
             booksContent.style.display === "block" ||
@@ -436,9 +433,6 @@ const loadSermons = () => {
                     "block")
         )
             el.style.zIndex = "-1";
-    });
-    document.querySelectorAll(".container").forEach((el) => {
-        el.style.height = el.offsetHeight + "px";
     });
     document.querySelectorAll(".sermon-thumbnail").forEach((el) => {
         el.style.height = 0 + "px";
