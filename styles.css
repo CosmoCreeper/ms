@@ -538,7 +538,7 @@ body {
     right: 20px;
     transform: translateY(-50%);
     top: calc(50% + 10px);
-    width: calc(60vw - 259px - 177.783px);
+    width: calc(60vw - 260px - 177.783px);
     height: calc((60vw - 259px - 177.783px) / 16 * 9 + 34px);
     z-index: 20000000;
 }
