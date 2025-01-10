@@ -137,14 +137,13 @@ if (window.mobileCheck()) {
 
 let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-if (isSafari || window.mobileCheck()) {
-    document.getElementById("miniplayer").style.resize = "none";
+/* if (isSafari || window.mobileCheck()) {
     document.getElementById(
         "miniplayer"
     ).innerHTML += `<div id="resize-handle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bounding-box" viewBox="0 0 16 16">
     <path d="M5 2V0H0v5h2v6H0v5h5v-2h6v2h5v-5h-2V5h2V0h-5v2zm6 1v2h2v6h-2v2H5v-2H3V5h2V3zm1-2h3v3h-3zm3 11v3h-3v-3zM4 15H1v-3h3zM1 4V1h3v3z"/>
   </svg></div>`;
-}
+} */
 
 const loadMax = window.mobileCheck() ? mSL : dSL;
 
@@ -679,11 +678,11 @@ const toggleFilterButton = (img, content, button, otherWindowsOpen) => {
         // document
         //     .querySelectorAll(".sermon")
         //     .forEach((el) => (el.style.zIndex = "-1"));
-        if (
+/*         if (
             window.mobileCheck() &&
             document.getElementById("pastors-content").style.display === "block"
         )
-            togglePastors(true);
+            togglePastors(true); */
     } else {
         img.src = `assets/arrow-down.svg`;
         content.style.display = "none";
@@ -714,30 +713,7 @@ const toggleSort = (otherWindowsOpen = false) => {
 };
 
 const togglePastors = (otherWindowsOpen = false) => {
-    if (document.getElementById("pastors-content").style.display === "none") {
-        document.getElementById("pastors-img").src = `assets/arrow-up.svg`;
-        document.getElementById("pastors-content").style.display = "block";
-        document
-            .querySelectorAll(".video")
-            .forEach((el) => (el.style.zIndex = "-1"));
-        document
-            .querySelectorAll(".sermon")
-            .forEach((el) => (el.style.zIndex = "-1"));
-        if (uploadContent.style.display === "block") toggleUpload(true);
-        if (booksContent.style.display === "block") toggleBooks(true);
-        if (sortContent.style.display === "block") toggleSort(true);
-    } else {
-        document.getElementById("pastors-img").src = `assets/arrow-down.svg`;
-        document.getElementById("pastors-content").style.display = "none";
-        if (!otherWindowsOpen)
-            document
-                .querySelectorAll(".video")
-                .forEach((el) => (el.style.zIndex = "0"));
-        if (!otherWindowsOpen)
-            document
-                .querySelectorAll(".sermon")
-                .forEach((el) => (el.style.zIndex = "0"));
-    }
+    toggleFilterButton(document.getElementById("pastors-img"), document.getElementById("pastors-content"), document.getElementById("pastors-button"), otherWindowsOpen)
 };
 
 if (window.mobileCheck()) {
@@ -843,9 +819,7 @@ const displayUpload = () => {
 };
 
 const embed = miniplayer;
-const resizeHandle = window.mobileCheck()
-    ? document.getElementById("resize-handle")
-    : null;
+const resizeHandle = document.getElementById("miniplayer-resize");
 
 let isDragging = false;
 let isResizing = false;
@@ -944,10 +918,8 @@ document
     .addEventListener("touchend", handleDragEnd);
 
 // Event listeners for resizing
-if (window.mobileCheck()) {
-    resizeHandle.addEventListener("mousedown", handleResizeStart);
-    resizeHandle.addEventListener("touchstart", handleResizeStart);
-}
+resizeHandle.addEventListener("mousedown", handleResizeStart);
+resizeHandle.addEventListener("touchstart", handleResizeStart);
 document.addEventListener("mousemove", handleResizeMove);
 document.addEventListener("touchmove", handleResizeMove);
 document.addEventListener("mouseup", handleResizeEnd);
@@ -957,31 +929,6 @@ const loadMore = () => {
     document.getElementById("load-more").remove();
     page++;
     sortBy === "top" ? loadContents() : search();
-};
-
-const lineSync = async (id, start, el, click = false) => {
-    if (player.playerInfo.playerState === 1) {
-        const sermons = await fetchSermons(id);
-        if (click)
-            video.src = `https://www.youtube.com/embed/${id}?autoplay=1&start=${start}&enablejsapi=1`;
-        document.querySelectorAll(".sync-line").forEach((element) => {
-            element.id = "";
-        });
-        el.id = "selected-line";
-        const nextTime = await Math.floor(
-            sermons[0].transcript.filter(
-                (_element, idx) =>
-                    idx !== 0 &&
-                    Math.floor(sermons[0].transcript[idx - 1][0]) === start
-            )[0][0]
-        );
-        if (el.nextElementSibling) {
-            setTimeout(
-                () => lineSync(id, start, el.nextElementSibling),
-                (nextTime - start) * 1000
-            );
-        }
-    }
 };
 
 const miniplayerLoad = async (id, timestamp) => {
@@ -1114,18 +1061,38 @@ document.getElementById("scroll-to-top").addEventListener("click", topFunction);
 
 const toggleTestament = (testament) => {
     if (testament === "Old Testament") {
+        let allTestament = true;
         for (const book of books[0]) {
-            document.getElementById(
-                book[0].replace(" ", "").toLowerCase()
-            ).className = "book checked";
-            book[1] = true;
+            if (!book[1]) allTestament = false;
+        }
+        for (const book of books[0]) {
+            if (allTestament) {
+                book[1] = false;
+                document.getElementById(book[0].replace(" ", "").toLowerCase()).className = "book";
+            } else {
+                book[1] = true;
+                document.getElementById(book[0].replace(" ", "").toLowerCase()).className = "book";
+                document.getElementById(
+                    book[0].replace(" ", "").toLowerCase()
+                ).className = "book checked";
+            }
         }
     } else {
+        let allTestament = true;
         for (const book of books[1]) {
-            document.getElementById(
-                book[0].replace(" ", "").toLowerCase()
-            ).className = "book checked";
-            book[1] = true;
+            if (!book[1]) allTestament = false;
+        }
+        for (const book of books[1]) {
+
+            if (allTestament) {
+                book[1] = false;
+                document.getElementById(book[0].replace(" ", "").toLowerCase()).className = "book";
+            } else { 
+                book[1] = true;
+                document.getElementById(
+                    book[0].replace(" ", "").toLowerCase()
+                ).className = "book checked";
+            }
         }
     }
     displayBooks();

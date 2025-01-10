@@ -153,6 +153,8 @@ body {
 
 #upper-search {
     display: block;
+    position: relative;
+    z-index: 200;
 }
 
 #lookup hr {
@@ -235,7 +237,6 @@ body {
 .dropdown {
     position: relative;
     display: inline-block;
-    z-index: 100;
 }
 
 .dropdown .cover {
@@ -273,13 +274,6 @@ body {
     background-color: rgb(255, 255, 255);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.dropdown hr {
-    width: 90% !important;
-    border-width: 1px !important;
-    margin-top: 10px;
-    margin-bottom: 20px;
 }
 
 #upload-title {
@@ -331,14 +325,6 @@ body {
     line-height: 25px;
     margin: 8px;
     font-size: 13px;
-}
-
-#books-content hr {
-    width: 90%;
-    margin: 0;
-    margin-top: 10px;
-    margin-left: 50%;
-    transform: translateX(-50%);
 }
 
 #books-content .cancel, #books-content .ok {
@@ -532,14 +518,11 @@ body {
     right: 20px;
     transform: translateY(-50%);
     top: calc(50% + 10px);
-    width: calc(926px - 260px - 177.783px - 20px);
-    height: calc((926px - 259px - 177.783px - 20px) / 16 * 9 + 34px);
-    z-index: 20000000;
-}
-
-#miniplayer {
-    resize: both;
-    overflow: hidden;
+    min-width: 163px;
+    min-height: calc(163px / 16 * 9 + 34px);
+    width: calc(100vw - 926px - 206px - 40px);
+    height: calc((100vw - 926px - 206px - 40px) / 16 * 9 + 34px);
+    z-index: 900;
 }
 
 #miniplayer-blind {
@@ -552,31 +535,52 @@ body {
     color: white;
 }
 
+#miniplayer-resize {
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    z-index: 900000000000000000000000000000000000000;
+    cursor: nwse-resize;
+}
+
+#miniplayer-resize img {
+    filter: invert(0%) sepia(4%) saturate(15%) hue-rotate(209deg) brightness(88%) contrast(100%);
+}
+
 #drag-overlay {
     cursor: grab;
+    height: 34px;
 }
-/* 
+
 #drag-text {
     pointer-events: none;
-    text-indent: 10px;
-    height: 100%;
-    line-height: 34px;
-} */
+    text-indent: 5px;
+    height: 34px;
+}
+
+#drag-text img {
+    height: 34px;
+    width: 34px;
+}
+
+#miniplayer-close, #drag-text img {
+    filter: invert(99%) sepia(100%) saturate(0%) hue-rotate(77deg) brightness(106%) contrast(101%);
+}
 
 #miniplayer-close {
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
     cursor: pointer;
 }
 
 #miniplayer-close:hover {
-    background-color: rgba(255, 255, 255, 0.3);
 }
 
 #miniplayer iframe {
     width: 100%;
-    height: 90%;
+    height: calc(100% - 34px);
 }
 
 #resize-handle {
@@ -654,6 +658,7 @@ body {
     height: 100%;
     padding-right: 10px;
     padding-left: 20px;
+    min-height: 80px;
 }
 
 .sermon-bracket {
@@ -694,18 +699,23 @@ body {
     color: white;
 }
 
+@media screen and (max-width: 1639px) {
+
+}
+
 @media screen and (max-width: 1135px) {
+
     #search-right {
         position: relative;
         width: 100%;
         height: 42px;
-
+        margin-top: 7px;
     }
 
     #livestream {
         display: block;
         position: relative;
-        width: 100%;
+        width: calc(90vw - 10px);
         padding-left: 0;
         padding-right: 0;
         border-radius: 28px;
@@ -800,7 +810,7 @@ body {
 
     #lookup hr {
         width: 90vw;
-        margin-top: 45px;
+        margin-top: 50px;
     }
 
     #filter-grid {
@@ -864,8 +874,8 @@ body {
     }
 
     #miniplayer, #skeleton {
-        width: 445px;
-        height: 37%;
+        width: 85vw;
+        height: 30%;
         top: 100%;
         left: 50%;
         transform: translate(-50%, -120%);
@@ -1023,4 +1033,19 @@ body {
     top: 0;
     height: 5px;
     width: 5px;
+}
+
+.dropdown hr {
+    width: 90% !important;
+    border-width: 1px !important;
+    margin-top: 10px !important;
+    margin-bottom: 20px;
+}
+
+#books-content hr {
+    width: 90%;
+    margin: 0;
+    margin-top: 10px;
+    margin-left: 50%;
+    transform: translateX(-50%);
 }

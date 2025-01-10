@@ -103,12 +103,17 @@
 
     <div id="miniplayer" style="display: none;">
         <div id="miniplayer-blind">
-            <div id="drag-overlay"><!-- <div id="drag-text">#</div> --></div>
-            <svg id="miniplayer-close" onclick="closeMiniplayer()" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-            </svg>
+            <div id="drag-overlay">
+                <div id="drag-text">
+                    <img src="./assets/grip.svg"/>
+                </div>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" id="miniplayer-close" onclick="closeMiniplayer()"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M10.9393 12L6.9696 15.9697L8.03026 17.0304L12 13.0607L15.9697 17.0304L17.0304 15.9697L13.0607 12L17.0303 8.03039L15.9696 6.96973L12 10.9393L8.03038 6.96973L6.96972 8.03039L10.9393 12Z" fill="#080341"></path> </g></svg>
         </div>
         <iframe src="https://www.youtube.com/watch?v=RuFdirOTpS4" id="video" title="FBC Sermon Viewport" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <div id="miniplayer-resize">
+            <img src="./assets/resize.svg" width="40px" height="40px"/>
+        </div>
     </div>
     <div id="skeleton"><div>Click on a timestamp to play a sermon</div></div>
 
