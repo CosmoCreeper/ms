@@ -213,7 +213,7 @@ const betweenDates = (date) => {
         );
         const liveResponse = await fetch(`${prefix}live${suffix}`);
         live = await liveResponse.json();
-        await fetch(`${prefix}live${suffix}`).then(() => search());
+        await fetch(`${prefix}live${suffix}`).then(() => resetSearch());
     } catch (err) {
         console.error(err);
     }
@@ -270,11 +270,14 @@ const fetchSermons = async (VideoID = "") => {
     }
 };
 
+const PAGE_SIZE = 20;
+let keyword = "";
+let reachedEndOfSearch = false;
+
 const loadContents = () => {
     if (Array.isArray(results)) {
         let contentsTemp = "";
         let videoDiv = "";
-        const keyword = searchBar.value.replace(/[^a-zA-Z0-9 ]/g, "");
         let entryCount = 0;
         let enteredCount = 0;
         let replace = false;
@@ -358,12 +361,11 @@ const loadContents = () => {
         }</div></div>$`;
         contentsTemp +=
             (page === 0 ? `<div id="match-count"></div>` : "") +
-            videoDiv +
-            ((results.length === 0 && page !== 0) || enteredCount < loadMax
-                ? `<div id="no-results">No more results found.</div>`
-                : results.length !== 0
-                ? `<div id="load-more" onclick="loadMore()">Load more...</div>`
-                : "");
+            videoDiv;
+        if ((results.length === 0 && page !== 0) || enteredCount < loadMax) {
+            contentsTemp += `<div id="no-results">No more results found.</div>`;
+            reachedEndOfSearch = true;
+        }
         contents.innerHTML =
             (page !== 0
                 ? replace
@@ -401,11 +403,7 @@ const loadContents = () => {
     }
 };
 
-const PAGE_SIZE = 20;
-
 const loadSermons = () => {
-    if (loadedAll) return;
-
     let sermonDiv = currPage !== 0 ? contents.innerHTML : "";
     for (let i = currPage * PAGE_SIZE; i < (currPage + 1) * PAGE_SIZE && i < currLoadedSermons.length; i++) {
         const el = currLoadedSermons[i];
@@ -419,6 +417,7 @@ const loadSermons = () => {
     // Need to prevent further loading once we've reached the end.
     if ((currPage + 1) * PAGE_SIZE >= currLoadedSermons.length) {
         loadedAll = true;
+        sermonDiv += `<div id="no-results">No more results found.</div>`;
     }
 
     contents.innerHTML = sermonDiv;
@@ -446,10 +445,6 @@ const search = async () => {
     loadedAll = false;
     currPage = 0;
 
-    const keyword = searchBar.value
-        .toLowerCase()
-        .replace(/[^a-z0-9 ]/g, "") // Replace invalid characters (why are these invalid??)
-        .trim();
     let normalSearch = false;
 
     // If the search bar is empty, load all sermons (Same as home page).
@@ -661,6 +656,11 @@ const resetSearch = () => {
     totalLoadedContents = 0;
     searchIterations = 0;
     prevVideoId = "";
+    keyword = searchBar.value
+        .toLowerCase()
+        .replace(/[^a-z0-9 ]/g, "") // Replace symbols.
+        .trim();
+    reachedEndOfSearch = false;
     search();
 };
 
@@ -925,12 +925,6 @@ document.addEventListener("touchmove", handleResizeMove);
 document.addEventListener("mouseup", handleResizeEnd);
 document.addEventListener("touchend", handleResizeEnd);
 
-const loadMore = () => {
-    document.getElementById("load-more").remove();
-    page++;
-    sortBy === "top" ? loadContents() : search();
-};
-
 const miniplayerLoad = async (id, timestamp) => {
     const miniplayer = document.getElementById("miniplayer");
     const video = document.getElementById("video");
@@ -1044,9 +1038,15 @@ const scrollFunction = () => {
         document.getElementById("scroll-to-top").style.display = "none";
     }
 
-    // If we reach the bottom of the page, load more sermons.
-    if (searchBar.value === "" && (window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight) {
-        loadSermons();
+    // If we reach the bottom of the page, load more sermons or contents.
+    const atBottomOfPage = (window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight;
+    if (atBottomOfPage) {
+        if (keyword === "" && !loadedAll) {
+            loadSermons();
+        } else if (keyword !== "" && !reachedEndOfSearch) {
+            page++;
+            sortBy === "top" ? loadContents() : search();
+        }
     }
 };
 

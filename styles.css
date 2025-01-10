@@ -530,7 +530,7 @@ body {
     height: 34px;
     display: grid;
     grid-template-columns: calc(100% - 34px) 34px;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.3);
     /* border-radius: 8px 8px 0 0; */
     color: white;
 }
@@ -576,6 +576,7 @@ body {
 }
 
 #miniplayer-close:hover {
+    background-color: rgba(217, 217, 217, 0.5);
 }
 
 #miniplayer iframe {
@@ -605,7 +606,6 @@ body {
     cursor: pointer;
     transition: all 200ms ease;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
 #scroll-to-top:hover {
