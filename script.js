@@ -489,7 +489,7 @@ const search = async () => {
 
         if (sortBy === "new" || sortBy === "top")
             await sermons.sort((a, b) => new Date(b.date) - new Date(a.date));
-        else if (sortBy === "old")
+        else if (sortBy === "old" && !recentSermon)
             await sermons.sort((a, b) => new Date(a.date) - new Date(b.date));
 
         results = [];
