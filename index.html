@@ -9,8 +9,13 @@
     <script src="assets/moment.js"></script>
 </head>
 <body>
-    <div id="pixel" ondblclick="credits()">
-
+    <div class="mobile-title">
+        <svg onclick="loadFBC()" class="logo" preserveAspectRatio="xMidYMid meet" data-bbox="0.595 0.694 32.311 32.306" viewBox="0.595 0.694 32.311 32.306" xmlns="http://www.w3.org/2000/svg" data-type="color" role="presentation" aria-hidden="true" aria-label="">
+            <g>
+                <path d="M16.6 33h1.3V15.7h6.2v-2.4h-6.2V6.5h-2.3v6.8H9.4v2.4h6.2v14.7c-7.5-.7-13-7.3-12.4-14.8.7-7.5 7.3-13 14.8-12.4 7.5.7 13 7.3 12.4 14.8-.5 6-5 11-11 12.2v2.5c8.8-1.5 14.7-9.8 13.3-18.6C31.2 5.4 22.9-.5 14.1.9 5.3 2.4-.6 10.7.8 19.5c1.3 7.7 8 13.4 15.8 13.5z" fill="#165f7e" data-color="1"></path>
+            </g>
+        </svg>
+        <div class='title'>Sermon Search</div>
     </div>
     <div id="container">
         <div class="logo-container">
@@ -40,7 +45,7 @@
                     <div id="dropdowns">
                         <div class="dropdown">
                             <div class="cover" id="upload-button">
-                                <span id="upload-full">Upload Date: <span class="value" id="upload">Any Time</span></span>
+                                <span id="upload-full"></span>
                                 <img id="upload-img" src="assets/arrow-down.svg" width="15">
                             </div>
                             <div id="upload-content" class="content" style="display: none;">
@@ -55,7 +60,7 @@
                         </div>
                         <div class="dropdown">
                             <div class="cover" id="books-button">
-                                <span id="books-full">Book(s): <span class="value" id="books">All</span></span>
+                                <span id="books-full"></span>
                                 <img id="books-img" src="assets/arrow-down.svg" width="15">
                             </div>
                             <div id="books-content" class="content" style="display: none;">
@@ -73,7 +78,7 @@
                         </div>
                         <div class="dropdown">
                             <div class="cover" id="sort-button">
-                                <span id="sort-full">Sort by: <span class="value" id="sort">New</span></span>
+                                <span id="sort-full"></span>
                                 <img id="sort-img" src="assets/arrow-down.svg" width="15">
                             </div>
                             <div id="sort-content" class="content" style="display: none;">
@@ -85,12 +90,27 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="dropdown mobile-dropdown">
+                            <div class="cover" id="pastors-button">
+                                <span id="pastors-full">Pastor(s)</span>
+                                <img id="pastors-img" src="assets/arrow-down.svg" width="15">
+                            </div>
+                            <div id="pastors-content" class="content" style="display: none;">
+                                <span class="description">Pastors</span>
+                                <div class="options">
+                                    <div class="clickable" id="rob">Rob</div>
+                                    <div class="clickable" id="mark">Mark</div>
+                                    <div class="clickable" id="greg">Greg</div>
+                                    <div class="clickable" id="guests">Guests</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div id="pastors">
-                        <div class="pastor" id="rob" onclick="togglePastor('rob')">Rob</div>
-                        <div class="pastor" id="mark" onclick="togglePastor('mark')">Mark</div>
-                        <div class="pastor" id="greg" onclick="togglePastor('greg')">Greg</div>
-                        <div class="pastor" id="guests" onclick="togglePastor('guests')">Guests</div>
+                        <div class="pastor" id="rob-btn" onclick="togglePastor('rob')">Rob</div>
+                        <div class="pastor" id="mark-btn" onclick="togglePastor('mark')">Mark</div>
+                        <div class="pastor" id="greg-btn" onclick="togglePastor('greg')">Greg</div>
+                        <div class="pastor" id="guests-btn" onclick="togglePastor('guests')">Guests</div>
                     </div>
                 </div>
             </div>
