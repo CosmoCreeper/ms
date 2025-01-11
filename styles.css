@@ -79,6 +79,7 @@ body {
     min-height: 80px;
     position: relative;
     width: calc(max(40vw, 500px) - 5px);
+    max-width: calc(926px - 190px - 8px);
 }
 
 .snippet:first-child {
@@ -844,6 +845,7 @@ body {
 
     .snippet {
         width: calc(90vw - 8px);
+        max-width: none;
     }
 
     .logo {
