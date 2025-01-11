@@ -53,7 +53,6 @@ let books = [
         ["Revelation", false, ""],
     ],
 ];
-let live = {};
 let recentSermon = false;
 let pastReferences = false;
 
@@ -64,7 +63,7 @@ let totalLoadedContents = 0;
 let prevVideoId = "";
 let searchIterations = 0;
 
-let other, specials, mark, greg, guests;
+let other, specials, mark, greg, guests, live;
 
 let currLoadedSermons = [];
 let currPage = 0;
@@ -74,6 +73,15 @@ const loadMax = 25;
 // =================================================================================================
 // UTILITIES
 // =================================================================================================
+const getCurrSunday = () => {
+    const today = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        new Date().getDate()
+    );
+    return moment(new Date(today.setDate(today.getDate() - today.getDay()))).format("YYYY-MM-DD");
+}
+
 const removeDuplicates = (originalArray) => {
     let trimmedArray = [];
     let values = [];
@@ -130,10 +138,6 @@ const betweenDates = (date) => {
                 book[2] = await response.json();
             }
         }
-        const otherResponse = await fetch(`${prefix}other${suffix}`);
-        other = await otherResponse.json();
-        const specialsResponse = await fetch(`${prefix}specials${suffix}`);
-        specials = await specialsResponse.json();
         const dataFetch = await fetch(`${prefix}guests${suffix}`);
         const data = await dataFetch.json();
         mark = await data.filter((el) => el["name"].includes("Mark LeHew"));
@@ -143,9 +147,13 @@ const betweenDates = (date) => {
                 !el["name"].includes("Greg Ryan") &&
                 !el["name"].includes("Mark LeHew")
         );
-        const liveResponse = await fetch(`${prefix}live${suffix}`);
-        live = await liveResponse.json();
-        await fetch(`${prefix}live${suffix}`).then(() => resetSearch());
+        const responsesJSON = await Promise.all([
+            fetch(`${prefix}other${suffix}`),
+            fetch(`${prefix}specials${suffix}`),
+            fetch(`${prefix}live${suffix}`)
+        ]);
+        [other, specials, live] = await Promise.all(responsesJSON.map(r => r.json()));
+        resetSearch();
     } catch (err) {
         console.error(err);
     }
@@ -154,41 +162,39 @@ const betweenDates = (date) => {
 const fetchSermons = async (VideoID = "") => {
     try {
         let finalResult = [];
-        if (!recentSermon || (recentSermon && keyword !== "")) {
-            let all = false;
-            if (
-                !pastors["rob"] &&
-                !pastors["mark"] &&
-                !pastors["greg"] &&
-                !pastors["guests"]
-            )
-                all = true;
-            let allBooks = true;
-            books.forEach((el) => {
-                el.forEach((book) => {
-                    if (book[1]) allBooks = false;
-                });
+        let all = false;
+        if (
+            !pastors["rob"] &&
+            !pastors["mark"] &&
+            !pastors["greg"] &&
+            !pastors["guests"]
+        )
+            all = true;
+        let allBooks = true;
+        books.forEach((el) => {
+            el.forEach((book) => {
+                if (book[1]) allBooks = false;
             });
-            if (pastors["rob"] || all) {
-                for (const testament of books) {
-                    for (const book of testament) {
-                        if (book[1] || allBooks)
-                            finalResult = finalResult.concat(await book[2]);
-                    }
+        });
+        if (pastors["rob"] || all) {
+            for (const testament of books) {
+                for (const book of testament) {
+                    if (book[1] || allBooks)
+                        finalResult = finalResult.concat(await book[2]);
                 }
-                if (allBooks) finalResult = finalResult.concat(await other);
             }
-            if ((pastors["mark"] || all) && allBooks)
-                finalResult = finalResult.concat(await mark);
-            if ((pastors["greg"] || all) && allBooks)
-                finalResult = finalResult.concat(await greg);
-            if ((pastors["guests"] || all) && allBooks)
-                finalResult = finalResult.concat(await guests);
-            if (all && allBooks)
-                finalResult = finalResult.concat(await specials);
-            if (VideoID !== "")
-                finalResult = finalResult.filter((el) => el.id === VideoID);
+            if (allBooks) finalResult = finalResult.concat(await other);
         }
+        if ((pastors["mark"] || all) && allBooks)
+            finalResult = finalResult.concat(await mark);
+        if ((pastors["greg"] || all) && allBooks)
+            finalResult = finalResult.concat(await greg);
+        if ((pastors["guests"] || all) && allBooks)
+            finalResult = finalResult.concat(await guests);
+        if (all && allBooks)
+            finalResult = finalResult.concat(await specials);
+        if (VideoID !== "")
+            finalResult = finalResult.filter((el) => el.id === VideoID);
         finalResult = finalResult.concat(await live);
         finalResult.sort((a, b) => new Date(b.date) - new Date(a.date));
         finalResult = finalResult.filter((el, idx) =>
@@ -196,6 +202,7 @@ const fetchSermons = async (VideoID = "") => {
                 ? el.date !== finalResult[idx + 1].date
                 : el.date
         );
+        if (recentSermon && keyword === "") finalResult = finalResult.filter((el) => el.date === getCurrSunday());
         return finalResult;
     } catch (error) {
         console.error("Error fetching or parsing JSON:", error);
@@ -226,7 +233,7 @@ const loadContents = () => {
 
                 if (prevVideoId !== el.id) {
                     if (
-                        el.date !== live[0].date &&
+                        el.date !== getCurrSunday() &&
                         !pastReferences &&
                         recentSermon
                     ) {
@@ -339,7 +346,7 @@ const loadSermons = () => {
     // Need to prevent further loading once we've reached the end.
     if ((currPage + 1) * PAGE_SIZE >= currLoadedSermons.length) {
         loadedAll = true;
-        sermonDiv += `<div id="no-results">No more results found.</div>`;
+        sermonDiv += `<div id="no-results">No${currLoadedSermons.length !== 0 ? ` more` : ``} results found.</div>`;
     }
 
     contents.innerHTML = sermonDiv;
@@ -351,7 +358,7 @@ const loadSermons = () => {
     currPage++;
 };
 
-const search = async (customSermons = 0) => {
+const search = async () => {
     // Reset current loaded page.
     loadedAll = false;
     currPage = 0;
@@ -465,9 +472,7 @@ const search = async (customSermons = 0) => {
     // Normal search query
     else if (keyword !== "") {
         normalSearch = true;
-        let sermons = removeDuplicates(
-            customSermons ? await customSermons : await fetchSermons()
-        );
+        let sermons = removeDuplicates(await fetchSermons());
 
         let totalInstances = 0;
 
