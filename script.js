@@ -79,8 +79,10 @@ const getCurrSunday = () => {
         new Date().getMonth(),
         new Date().getDate()
     );
-    return moment(new Date(today.setDate(today.getDate() - today.getDay()))).format("YYYY-MM-DD");
-}
+    return moment(
+        new Date(today.setDate(today.getDate() - today.getDay()))
+    ).format("YYYY-MM-DD");
+};
 
 const removeDuplicates = (originalArray) => {
     let trimmedArray = [];
@@ -150,9 +152,11 @@ const betweenDates = (date) => {
         const responsesJSON = await Promise.all([
             fetch(`${prefix}other${suffix}`),
             fetch(`${prefix}specials${suffix}`),
-            fetch(`${prefix}live${suffix}`)
+            fetch(`${prefix}live${suffix}`),
         ]);
-        [other, specials, live] = await Promise.all(responsesJSON.map(r => r.json()));
+        [other, specials, live] = await Promise.all(
+            responsesJSON.map((r) => r.json())
+        );
         resetSearch();
     } catch (err) {
         console.error(err);
@@ -191,8 +195,7 @@ const fetchSermons = async (VideoID = "") => {
             finalResult = finalResult.concat(await greg);
         if ((pastors["guests"] || all) && allBooks)
             finalResult = finalResult.concat(await guests);
-        if (all && allBooks)
-            finalResult = finalResult.concat(await specials);
+        if (all && allBooks) finalResult = finalResult.concat(await specials);
         if (VideoID !== "")
             finalResult = finalResult.filter((el) => el.id === VideoID);
         finalResult = finalResult.concat(await live);
@@ -202,7 +205,10 @@ const fetchSermons = async (VideoID = "") => {
                 ? el.date !== finalResult[idx + 1].date
                 : el.date
         );
-        if (recentSermon && keyword === "") finalResult = finalResult.filter((el) => el.date === getCurrSunday());
+        if (recentSermon && keyword === "")
+            finalResult = finalResult.filter(
+                (el) => el.date === getCurrSunday()
+            );
         return finalResult;
     } catch (error) {
         console.error("Error fetching or parsing JSON:", error);
@@ -237,7 +243,8 @@ const loadContents = () => {
                         !pastReferences &&
                         recentSermon
                     ) {
-                        if (totalLoadedContents === 0) videoDiv += "No results found.";
+                        if (totalLoadedContents === 0)
+                            videoDiv += "No results found.";
                         pastReferences = true;
                         videoDiv += `<div id="past-references"><hr>Past references found:</div>`;
                     }
@@ -301,7 +308,9 @@ const loadContents = () => {
         contentsTemp +=
             (page === 0 ? `<div id="match-count"></div>` : "") + videoDiv;
         if (results.length === 0 || enteredCount < loadMax) {
-            contentsTemp += `<div id="no-results">No${totalLoadedContents !== 0 ? ` more` : ``} results found.</div>`;
+            contentsTemp += `<div id="no-results">No${
+                totalLoadedContents !== 0 ? ` more` : ``
+            } results found.</div>`;
             reachedEndOfSearch = true;
         }
         contents.innerHTML =
@@ -346,7 +355,9 @@ const loadSermons = () => {
     // Need to prevent further loading once we've reached the end.
     if ((currPage + 1) * PAGE_SIZE >= currLoadedSermons.length) {
         loadedAll = true;
-        sermonDiv += `<div id="no-results">No${currLoadedSermons.length !== 0 ? ` more` : ``} results found.</div>`;
+        sermonDiv += `<div id="no-results">No${
+            currLoadedSermons.length !== 0 ? ` more` : ``
+        } results found.</div>`;
     }
 
     contents.innerHTML = sermonDiv;
