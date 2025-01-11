@@ -43,9 +43,9 @@ body {
 
 .video-grid {
     display: grid;
-    grid-template-columns: max(40vw, 500px) auto 50px;
+    grid-template-columns: min(max(40vw, 500px), calc(926px - 190px - 8px)) auto 50px;
     position: relative;
-    width: calc(max(40vw, 500px) + 58px);
+    width: calc(min(max(40vw, 500px), calc(926px - 190px - 8px)) + 58px);
 }
 
 #past-references {
