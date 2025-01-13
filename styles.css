@@ -190,6 +190,7 @@ body {
 #searchbar {
     width: 600px;
     height: 56px;
+    padding: 0;
 }
 
 #searchbar::selection {
