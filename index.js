@@ -77,7 +77,6 @@ for (let x = 0; x < 11; x++) {
                     const publishedDate = item.snippet.publishedAt;
                     const titleDate = title.split(" ")[0];
                     const publishedAt = publishedDate.split('-')[0] + "-" + titleDate.split("-")[1] + "-" + titleDate.split("-")[2];
-                    console.log(publishedDate, publishedAt);
                     videoDetails.push({ videoId, title, publishedAt });
                 }
 
