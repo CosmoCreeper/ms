@@ -78,7 +78,10 @@ for (let x = 0; x < 11; x++) {
                 for (const item of items) {
                     const videoId = item.snippet.resourceId.videoId;
                     const title = item.snippet.title;
-                    const publishedAt = title.split(" ")[0];
+                    const publishedDate = item.snippet.publishedAt;
+                    const titleDate = title.split(" ")[0];
+                    const publishedAt = publishedDate.split('-')[0] + "-" + titleDate.split("-")[1] + "-" + titleDate.split("-")[2];
+                    console.log(publishedDate, publishedAt);
                     videoDetails.push({ videoId, title, publishedAt });
                 }
 
