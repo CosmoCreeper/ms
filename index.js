@@ -36,7 +36,6 @@ for (let x = 0; x < 11; x++) {
     console.clear();
 
     let PLAYLIST_ID = IDs[x];
-    if (PLAYLIST_ID === "") PLAYLIST_ID = "PLDgRNhRk716aAzsef8-FSiybk9_BSz02C";
 
     const COMPLETED_TRANSCRIPTS_FILE = `${PLAYLIST_ID}.completed_transcripts.json`;
     let TRANSCRIPTS_OUTPUT_FILE = CNs[x];
@@ -118,21 +117,23 @@ for (let x = 0; x < 11; x++) {
     }
 
     (async () => {
-        const rawVideoDetails = await getVideoDetails(PLAYLIST_ID);
+        let rawVideoDetails = await getVideoDetails(PLAYLIST_ID);
         const transcriptsJSON = [];
         if (CNs[x] === "live") {
-            var now = new Date();
-            var today = new Date(
+            for (const id of IDs) if (id !== IDs[x]) rawVideoDetails = await rawVideoDetails.concat(await getVideoDetails(id));
+            let now = new Date();
+            let today = new Date(
                 now.getFullYear(),
                 now.getMonth(),
                 now.getDate()
             );
-            var lastSunday = new Date(
+            let lastSunday = new Date(
                 today.setDate(today.getDate() - today.getDay())
             );
             const videoDetails = await rawVideoDetails.filter(
                 (a) => a.publishedAt === lastSunday.toISOString().split("T")[0]
             );
+            if (videoDetails.length > 1) videoDetails = await videoDetails.filter((a) => !a.toLowerCase().includes("live!"));
             if (videoDetails.length > 0) {
                 for (const videoObj of videoDetails) {
                     const transcript = await getCaptions(videoObj.videoId);
