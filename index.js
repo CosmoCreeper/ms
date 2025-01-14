@@ -25,10 +25,6 @@ const CNs = [
     "live",
 ];
 
-/* const puppeteer = require('puppeteer-extra');
-const StealthPlugin = require('puppeteer-extra-plugin-stealth');
-puppeteer.use(StealthPlugin()); */
-/* const xml2js = require('xml2js'); */
 const axios = require("axios");
 const fs = require("fs");
 
@@ -81,7 +77,6 @@ for (let x = 0; x < 11; x++) {
                     const publishedDate = item.snippet.publishedAt;
                     const titleDate = title.split(" ")[0];
                     const publishedAt = publishedDate.split('-')[0] + "-" + titleDate.split("-")[1] + "-" + titleDate.split("-")[2];
-                    console.log(publishedDate, publishedAt);
                     videoDetails.push({ videoId, title, publishedAt });
                 }
 
@@ -96,33 +91,6 @@ for (let x = 0; x < 11; x++) {
     }
 
     async function getCaptions(videoId) {
-        /*         const url = `https://www.youtube.com/watch?v=${videoId}`;
-        const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', `--disable-setuid-sandbox`, "--enable-unsafe-swiftshader"], executablePath: puppeteer.executablePath() });
-        const page = await browser.newPage();
-        page.on('console', msg => console.log('PAGE LOG:', msg.text()));
-
-        const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:XX.0) Gecko/20100101 Firefox/XX.0';
-        await page.setUserAgent(userAgent);
-
-        await page.goto(url, { waitUntil: 'networkidle2' });
-
-        await page.screenshot({ path: 'screenshot.png' });
-        const htmlContent = await page.content();
-        fs.writeFileSync('page.html', htmlContent);
-
-        const captionsUrl = await page.evaluate(() => {
-            if (window.ytplayer && window.ytplayer.config && window.ytplayer.config.args) {
-                const rawPlayerResponse = window.ytplayer.config.args.raw_player_response;
-                if (rawPlayerResponse && rawPlayerResponse.captions) {
-                    const captionTracks = rawPlayerResponse.captions.playerCaptionsTracklistRenderer.captionTracks;
-                    if (captionTracks && captionTracks.length > 0) {
-                        return captionTracks[0].baseUrl; // Return the first caption track URL
-                    }
-                }
-            }
-            return null; // Return null if no captions are found
-        }); */
-
         let plain = [];
 
         let captions;
@@ -131,25 +99,6 @@ for (let x = 0; x < 11; x++) {
         );
         if (captions) {
             try {
-                /* const response = await page.goto(captionsUrl, { waitUntil: 'networkidle2' });
-                const xmlText = await response.text(); // Get the XML text */
-
-                // Parse the XML
-                /*                 await xml2js.parseString(xmlText, (err, result) => {
-                    if (err) {
-                        console.error('Error parsing XML:', err);
-                    } else {
-                        // Extract and decode captions
-                        result["transcript"]["text"].forEach((el) => {
-                            const start = el.$.start;
-                            let text;
-                            if (el["_"]) {
-                                text = he.decode(el["_"]) + " "; // Decode HTML entities
-                            }
-                            plain.push([start, text]);
-                        });
-                    }
-                }); */
                 for (const line of captions) {
                     const start = line["start"];
                     let text;
@@ -165,7 +114,6 @@ for (let x = 0; x < 11; x++) {
             console.log(`No captions URL found for video ID: ${videoId}`);
         }
 
-        /* await browser.close(); */
         return plain;
     }
 
@@ -188,7 +136,6 @@ for (let x = 0; x < 11; x++) {
             if (videoDetails.length > 0) {
                 for (const videoObj of videoDetails) {
                     const transcript = await getCaptions(videoObj.videoId);
-                    console.log(transcript, videoObj.videoId);
                     if (transcript) {
                         transcriptsJSON.push({
                             id: videoObj.videoId,
