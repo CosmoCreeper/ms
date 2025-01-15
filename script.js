@@ -543,8 +543,9 @@ const search = async () => {
                                     if (cK === 0 && word === "") {
                                         chooseBreak = true;
                                         break;
-                                    } else if (word === "" && cK !== 0)
+                                    } else if (word === "" && cK !== 0) {
                                         fL += iteration[1];
+                                    }
                                 }
                                 if (chooseBreak) break;
                             }
@@ -936,8 +937,7 @@ const scrollFunction = () => {
 
     // If we reach the bottom of the page, load more sermons or contents.
     const atBottomOfPage =
-        window.innerHeight + Math.round(window.scrollY) >=
-        document.body.offsetHeight;
+    (window.innerHeight + Math.ceil(window.scrollY)) >= document.body.offsetHeight - 2;
     if (atBottomOfPage) {
         if (keyword === "" && !loadedAll) {
             loadSermons();
