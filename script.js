@@ -936,6 +936,7 @@ const scrollFunction = () => {
     }
 
     // If we reach the bottom of the page, load more sermons or contents.
+    console.log(window.scrollY);
     const atBottomOfPage =
     (window.innerHeight + Math.ceil(window.scrollY)) >= document.body.offsetHeight - 2;
     if (atBottomOfPage) {
