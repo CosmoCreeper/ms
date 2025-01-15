@@ -332,7 +332,7 @@ const loadContents = () => {
                 el.parentElement.nextElementSibling.nextElementSibling.style.height =
                     el.offsetHeight + "px";
         });
-        /* scrollFunction(); */
+        scrollFunction();
     } else {
         contents.innerHTML = results;
     }
@@ -368,7 +368,7 @@ const loadSermons = () => {
 
     // Increment current loaded page for further loading by scroll.
     currPage++;
-    /* scrollFunction(); */
+    scrollFunction();
 };
 
 const search = async () => {
