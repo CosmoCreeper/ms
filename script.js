@@ -332,7 +332,7 @@ const loadContents = () => {
                 el.parentElement.nextElementSibling.nextElementSibling.style.height =
                     el.offsetHeight + "px";
         });
-        scrollFunction();
+        /*scrollFunction();*/
     } else {
         contents.innerHTML = results;
     }
@@ -368,7 +368,7 @@ const loadSermons = () => {
 
     // Increment current loaded page for further loading by scroll.
     currPage++;
-    scrollFunction();
+    /*scrollFunction();*/
 };
 
 const search = async () => {
@@ -936,9 +936,8 @@ const scrollFunction = () => {
     }
 
     // If we reach the bottom of the page, load more sermons or contents.
-    console.log(window.scrollY);
     const atBottomOfPage =
-    (window.innerHeight + Math.ceil(window.scrollY)) >= document.body.offsetHeight - 2;
+    Math.round(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight;
     if (atBottomOfPage) {
         if (keyword === "" && !loadedAll) {
             loadSermons();
