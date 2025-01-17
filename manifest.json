@@ -9,6 +9,8 @@
     "display": "standalone",
     "orientation": "any",
     "start_url": "/prss",
+    "dir": "ltr",
+    "lang": "en",
     "icons": [
         {
           "src": "./assets/app-images/windows11/SmallTile.scale-100.png",
