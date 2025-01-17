@@ -5,6 +5,9 @@
     "short_name": "FBC-SS",
     "id": "sermonsearch",
     "description": "Search Faith Bible Church sermons with our amazing tool!",
+    "prefer_related_applications": false,
+    "display": "fullscreen",
+    "orientation": "any",
     "start_url": "/prss",
     "icons": [
         {
