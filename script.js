@@ -332,7 +332,7 @@ const loadContents = () => {
                 el.parentElement.nextElementSibling.nextElementSibling.style.height =
                     el.offsetHeight + "px";
         });
-        /*scrollFunction();*/
+        scrollFunction();
     } else {
         contents.innerHTML = results;
     }
@@ -368,7 +368,7 @@ const loadSermons = () => {
 
     // Increment current loaded page for further loading by scroll.
     currPage++;
-    /*scrollFunction();*/
+    scrollFunction();
 };
 
 const search = async () => {
@@ -936,9 +936,7 @@ const scrollFunction = () => {
     }
 
     // If we reach the bottom of the page, load more sermons or contents.
-    const atBottomOfPage =
-    Math.round(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight;
-    if (atBottomOfPage) {
+    if (Math.round(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight) {
         if (keyword === "" && !loadedAll) {
             loadSermons();
         } else if (keyword !== "" && !reachedEndOfSearch) {
@@ -1058,3 +1056,16 @@ matchesMobile.addEventListener("change", () => {
     mobileDropdowns(matchesMobile);
     resetSearch();
 });
+
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(registration => {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      })
+      .catch(error => {
+        console.log('ServiceWorker registration failed: ', error);
+      });
+  });
+}
