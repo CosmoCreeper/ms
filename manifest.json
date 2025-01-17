@@ -6,7 +6,7 @@
     "id": "sermonsearch",
     "description": "Search Faith Bible Church sermons with our amazing tool!",
     "prefer_related_applications": false,
-    "display": "fullscreen",
+    "display": "standalone",
     "orientation": "any",
     "start_url": "/prss",
     "icons": [
