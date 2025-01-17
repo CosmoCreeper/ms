@@ -936,7 +936,7 @@ const scrollFunction = () => {
     }
 
     // If we reach the bottom of the page, load more sermons or contents.
-    if (Math.round(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight) {
+    if (Math.round(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 5) {
         if (keyword === "" && !loadedAll) {
             loadSermons();
         } else if (keyword !== "" && !reachedEndOfSearch) {
