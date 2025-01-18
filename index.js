@@ -75,7 +75,12 @@ for (let x = 0; x < 11; x++) {
                     const title = item.snippet.title;
                     const publishedDate = item.snippet.publishedAt;
                     const titleDate = title.split(" ")[0];
-                    const publishedAt = publishedDate.split('-')[0] + "-" + titleDate.split("-")[1] + "-" + titleDate.split("-")[2];
+                    const publishedAt =
+                        publishedDate.split("-")[0] +
+                        "-" +
+                        titleDate.split("-")[1] +
+                        "-" +
+                        titleDate.split("-")[2];
                     videoDetails.push({ videoId, title, publishedAt });
                 }
 
@@ -120,7 +125,11 @@ for (let x = 0; x < 11; x++) {
         let rawVideoDetails = await getVideoDetails(PLAYLIST_ID);
         const transcriptsJSON = [];
         if (CNs[x] === "live") {
-            for (const id of IDs) if (id !== IDs[x]) rawVideoDetails = await rawVideoDetails.concat(await getVideoDetails(id));
+            for (const id of IDs)
+                if (id !== IDs[x])
+                    rawVideoDetails = await rawVideoDetails.concat(
+                        await getVideoDetails(id)
+                    );
             let now = new Date();
             let today = new Date(
                 now.getFullYear(),
@@ -130,11 +139,23 @@ for (let x = 0; x < 11; x++) {
             let lastSunday = new Date(
                 today.setDate(today.getDate() - today.getDay())
             );
-            const videoDetails = await rawVideoDetails.filter(
-                (a) => a.publishedAt === lastSunday.toISOString().split("T")[0]
-            ).sort((a, idx) => new Date(rawVideoDetails[idx+1].publishedAt) - new Date(a.publishedAt)).filter((a, idx) => a.publishedAt !== rawVideoDetails[idx+1].publishedAt);
+            const videoDetails = await rawVideoDetails
+                .filter(
+                    (a) =>
+                        a.publishedAt === lastSunday.toISOString().split("T")[0]
+                )
+                .sort(
+                    (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+                )
+                .filter(
+                    (a, idx) =>
+                        a.publishedAt !== rawVideoDetails[idx + 1].publishedAt
+                );
             console.log(videoDetails);
-            if (videoDetails.length > 1) videoDetails = await videoDetails.filter((a) => !a.title.toLowerCase().includes("live!"));
+            if (videoDetails.length > 1)
+                videoDetails = await videoDetails.filter(
+                    (a) => !a.title.toLowerCase().includes("live!")
+                );
             if (videoDetails.length > 0) {
                 for (const videoObj of videoDetails) {
                     const transcript = await getCaptions(videoObj.videoId);
