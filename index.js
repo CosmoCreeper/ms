@@ -139,23 +139,20 @@ for (let x = 0; x < 11; x++) {
             let lastSunday = new Date(
                 today.setDate(today.getDate() - today.getDay())
             );
-            const videoDetails = await rawVideoDetails
+            let videoDetails = await rawVideoDetails
                 .filter(
                     (a) =>
                         a.publishedAt === lastSunday.toISOString().split("T")[0]
                 )
-                .sort(
-                    (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
-                )
                 .filter(
                     (a, idx) =>
-                        a.publishedAt !== rawVideoDetails[idx + 1].publishedAt
-                );
-            console.log(videoDetails);
-            if (videoDetails.length > 1)
-                videoDetails = await videoDetails.filter(
+                        a.id !== rawVideoDetails[idx + 1].id
+                )
+                .filter(
                     (a) => !a.title.toLowerCase().includes("live!")
                 );
+            console.log(videoDetails);
+            return;
             if (videoDetails.length > 0) {
                 for (const videoObj of videoDetails) {
                     const transcript = await getCaptions(videoObj.videoId);
