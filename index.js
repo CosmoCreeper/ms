@@ -144,12 +144,7 @@ for (let x = 0; x < 11; x++) {
                     (a) =>
                         a.publishedAt === lastSunday.toISOString().split("T")[0]
                 )
-                .filter((a) => !a.title.toLowerCase().includes("live!"))
-                .filter((el, idx) =>
-                    idx !== rawVideoDetails.length - 1
-                        ? el.date !== rawVideoDetails[idx + 1].date
-                        : el.date
-                );
+                .filter((a) => !a.title.toLowerCase().includes("live!"));
             console.log(videoDetails);
             if (videoDetails.length > 0) {
                 for (const videoObj of videoDetails) {
