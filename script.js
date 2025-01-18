@@ -304,7 +304,7 @@ const loadContents = () => {
         });
         const offsetArr = contents.innerHTML.split(`.jpg" style="height: `);
         const offset = Number(offsetArr[offsetArr.length - 1].split("px")[0]);
-        const regex = `</div><div class="bracket"></div><img onclick="miniplayerLoad\\('${replaceID}', 0\\)" class="thumbnail" src="https://i.ytimg.com/vi/${replaceID}/mqdefault.jpg" style="height: ${offset}px;"></div></div>$`;
+        const regex = `</div><div class="bracket"></div><img onclick="miniplayerLoad\\('${replaceID}', 0\\)" class="thumbnail" src="https://i.ytimg.com/vi/${replaceID}/mqdefault.jpg"${!matchesMobile.matches ? ` style="height: ${offset}px;"` : ``}></div></div>$`;
         contentsTemp +=
             (page === 0 ? `<div id="match-count"></div>` : "") + videoDiv;
         if (results.length === 0 || enteredCount < loadMax) {
@@ -936,7 +936,7 @@ const scrollFunction = () => {
     }
 
     // If we reach the bottom of the page, load more sermons or contents.
-    if (Math.round(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 5) {
+    if (Math.round(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 20) {
         if (keyword === "" && !loadedAll) {
             loadSermons();
         } else if (keyword !== "" && !reachedEndOfSearch) {
