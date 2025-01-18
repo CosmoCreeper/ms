@@ -133,6 +133,7 @@ for (let x = 0; x < 11; x++) {
             const videoDetails = await rawVideoDetails.filter(
                 (a) => a.publishedAt === lastSunday.toISOString().split("T")[0]
             );
+            console.log(videoDetails, videoDetails.filter(a => a.toLowerCase()), videoDetails.filter((a) => !a.toLowerCase().includes("live!")));
             if (videoDetails.length > 1) videoDetails = await videoDetails.filter((a) => !a.toLowerCase().includes("live!"));
             if (videoDetails.length > 0) {
                 for (const videoObj of videoDetails) {
