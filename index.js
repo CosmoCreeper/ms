@@ -132,9 +132,9 @@ for (let x = 0; x < 11; x++) {
             );
             const videoDetails = await rawVideoDetails.filter(
                 (a) => a.publishedAt === lastSunday.toISOString().split("T")[0]
-            );
+            ).sort((a, idx) => new Date(videoDetails[idx+1].date) - new Date(a.date)).filter((a, idx) => a.date !== videoDetails[idx+1].date);
             console.log(videoDetails);
-            if (videoDetails.length > 1) videoDetails = await videoDetails.filter((a) => !a.toLowerCase().includes("live!"));
+            if (videoDetails.length > 1) videoDetails = await videoDetails.filter((a) => !a.title.toLowerCase().includes("live!"));
             if (videoDetails.length > 0) {
                 for (const videoObj of videoDetails) {
                     const transcript = await getCaptions(videoObj.videoId);
