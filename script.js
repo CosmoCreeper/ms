@@ -1,4 +1,4 @@
-const prefix = "https://cosmocreeper.github.io/prss/data/";
+const prefix = "https://cosmocreeper.github.io/ms/data/";
 const suffix = ".json";
 
 const searchBar = document.getElementById("searchbar");
@@ -130,33 +130,9 @@ const betweenDates = (date) => {
 (async () => {
     try {
         contents.innerHTML = `<div id="match-count">Loading sermons...</div>`;
-        for (const testament of books) {
-            for (const book of testament) {
-                const response = await fetch(
-                    `${
-                        prefix + book[0].toLowerCase().replace(" ", "") + suffix
-                    }`
-                );
-                book[2] = await response.json();
-            }
-        }
-        const dataFetch = await fetch(`${prefix}guests${suffix}`);
-        const data = await dataFetch.json();
-        mark = await data.filter((el) => el["name"].includes("Mark LeHew"));
-        greg = await data.filter((el) => el["name"].includes("Greg Ryan"));
-        guests = await data.filter(
-            (el) =>
-                !el["name"].includes("Greg Ryan") &&
-                !el["name"].includes("Mark LeHew")
-        );
-        const responsesJSON = await Promise.all([
-            fetch(`${prefix}other${suffix}`),
-            fetch(`${prefix}specials${suffix}`),
-            fetch(`${prefix}live${suffix}`),
-        ]);
-        [other, specials, live] = await Promise.all(
-            responsesJSON.map((r) => r.json())
-        );
+        console.log(prefix + "live" + suffix, await fetch(prefix + "live" + suffix));
+        const response = await fetch(prefix + "live" + suffix);
+        live = await response.json();
         resetSearch();
     } catch (err) {
         console.error(err);
@@ -165,50 +141,12 @@ const betweenDates = (date) => {
 
 const fetchSermons = async (VideoID = "") => {
     try {
+        console.log(await live);
         let finalResult = [];
-        let all = false;
-        if (
-            !pastors["rob"] &&
-            !pastors["mark"] &&
-            !pastors["greg"] &&
-            !pastors["guests"]
-        )
-            all = true;
-        let allBooks = true;
-        books.forEach((el) => {
-            el.forEach((book) => {
-                if (book[1]) allBooks = false;
-            });
-        });
-        if (pastors["rob"] || all) {
-            for (const testament of books) {
-                for (const book of testament) {
-                    if (book[1] || allBooks)
-                        finalResult = finalResult.concat(await book[2]);
-                }
-            }
-            if (allBooks) finalResult = finalResult.concat(await other);
-        }
-        if ((pastors["mark"] || all) && allBooks)
-            finalResult = finalResult.concat(await mark);
-        if ((pastors["greg"] || all) && allBooks)
-            finalResult = finalResult.concat(await greg);
-        if ((pastors["guests"] || all) && allBooks)
-            finalResult = finalResult.concat(await guests);
-        if (all && allBooks) finalResult = finalResult.concat(await specials);
+        finalResult = finalResult.concat(await live);
+        console.log(finalResult);
         if (VideoID !== "")
             finalResult = finalResult.filter((el) => el.id === VideoID);
-        finalResult = finalResult.concat(await live);
-        finalResult.sort((a, b) => new Date(b.date) - new Date(a.date));
-        finalResult = finalResult.filter((el, idx) =>
-            idx !== finalResult.length - 1
-                ? el.date !== finalResult[idx + 1].date
-                : el.date
-        );
-        if (recentSermon && keyword === "")
-            finalResult = finalResult.filter(
-                (el) => el.date === getCurrSunday()
-            );
         return finalResult;
     } catch (error) {
         console.error("Error fetching or parsing JSON:", error);
