@@ -10,7 +10,7 @@ const fs = require("fs");
 
 const TranscriptAPI = require("youtube-transcript-api");
 
-const API_KEY = "AIzaSyAUV5G0T8wlnIpYiw_m2p4KW6XOSfOTuBk";
+
 
 for (let x = 0; x < 1; x++) {
     console.clear();
